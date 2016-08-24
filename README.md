@@ -2,7 +2,7 @@ BR Continuity - Android
 ============
 
 ### Purpose
-This library provides a means to retain an object across Android lifecycle events for a specified amount of time after that object has been destroyed. The objects are keyed on the type of the "anchor" object requesting it, the Android Task that the anchor exists in, the type of the continuous class, and an optional string tag. 
+This library provides a means to retain an object across Android UI lifecycle events for a specified amount of time after that UI object has been destroyed. The retained objects are keyed on combination of the type of the "anchor" (UI) object requesting it, the Android Task that the anchor exists in, the type of the continuous class, and an optional string tag. 
 
 ### Key Concepts
 * Anchor - An object whose existence is used to determine whether to keep the ContinuousObject around.
@@ -12,12 +12,12 @@ This library provides a means to retain an object across Android lifecycle event
 * ContainerId - A combination of the canonical name of the Anchor, Android Task ID, canonical name of the ContinuousObject, and a Tag which uniquely identifies a ContinuousObject for storage and retrieval.
 * Check Interval - Time in milliseconds between freshness checks to determine if an anchor object has been garbage collected. 
 * Default Lifetime - Time in milliseconds to retain a ContinuousObject after all associated Anchor objects have been garbage collected. 
-* Idle Shutdown - Time in milliseconds that the freshness check thread will run without any objects being accessed. After this time the thread will shut down until the next operation occurs. 
-* Max Empty Iterations - If the repository is empty for this number of iterations, the freshness checking thread will shutdown until future operations occur. 
+* Idle Shutdown - Time in milliseconds that the freshness check thread will run without any objects being accessed. After this time the thread will shut down until the next operation occurs. Objects in the repository will remain.
+* Max Empty Iterations - If the repository is empty for this number of iterations, the freshness checking thread will shutdown until the next operation occurs.  
 * ContinuityFactory - Generic Functional Interface that will create an object that requires constructor parameters.
 
 ### Usage
-The ContinuityRepository object should be held in such a way that there is only one instance in use and that it outlives your Activities. You can use a Singleton to contain it, a DI framework, Service Locator, or whatever floats your boat. In the examples we'll just assume I have this Singleton-like instance at hand already.
+The ContinuityRepository object should be held in such a way that there is typically only one instance in use and that it outlives your Activities. You can use a Singleton to contain it, a DI framework, Service Locator, or whatever floats your boat. In the examples we'll just assume I have this Singleton-like instance at hand already.
 
 #### Presenter
 Create a presenter class somewhere and be sure it implements ContinuousObject if you want to be notified when it is being discarded. 
@@ -58,26 +58,28 @@ Fragments are a slightly different case. Because the Android Task ID is unknown 
 			MyPresenter myPresenter = continuityRepository.with(this, MyPresenter.class).build();
 	    }
 		
-**NOTE:** This will not be the same instance that was provided to the Activity in the example above even if the Fragment is attached to that Activity. If you want them to receive the same Presenter(not recommended) pass the Activity instance as the Anchor for both calls. Seriously, you almost certainly shouldn't do this but there it is.
+**NOTE:** This will not be the same instance that was provided to the Activity in the example above even if the Fragment is attached to that Activity. If you want them to receive the same Presenter(not recommended) pass the Activity instance as the Anchor for both calls. You shouldn't share Presenters or really any other object this way.
 
 #### Changing Defaults
-If the default timeouts are not acceptable, you can specify your own in the ContinuityRepository constructor. You can also override the lifetime of a single ContinuousObject by specifying a different lifetime in the builder. 
+If the default timeouts are not acceptable, you can specify your own in the ContinuityRepository constructor. You can even have many ContinuousRepository instances with different timings, but that may become hard to manage. You can also override the lifetime of a single ContinuousObject by specifying a different lifetime in the builder. 
 
 #### Builder Options
 		
 		final String testString = "test"; //Used later for the ExampleTestClass constructor.
 		
 		ExampleTestClass exampleTestClass = continuityRepository.with(this, ExampleTestClass.class)
-			.task(1234)     // Provide an arbitrary task id instead of trying to obtain it from the Anchor
-		    .lifetime(1000) // Change the lifetime that this ContinuousObject should be retained
+			.task(1234)      //Provide an arbitrary task id instead of trying to obtain it from the Anchor
+		    .lifetime(1000)  //Change the lifetime that this specific ContinuousObject should be retained
 		    .using(new ContinuityFactory<ExampleTestClass>() {
                @Override
                 public ExampleTestClass create() {
                     return new ExampleTestClass(testString);
                 }
-            })              //Use an anonymous ContinuityFactory if the constructor requires arguments.
+            })               //Use an anonymous ContinuityFactory if the constructor requires arguments.
             .tag("example1") //Further differentiate the ContainerId with a custom tag like an article Id.
-            .build();       //Either create or retrieve the ContinuousObject instance.
+            .build();        //Either create or retrieve the ContinuousObject instance.
+
+Changing the lifetime can allow for a longer or shorter than default time between the destruction and recreation of an Anchor. The highest lifetime specified by any builder for a ContinuousObject **instance** will take precedent until that ContinuousObject instance is discarded. Handle with care.
 
 In most cases the ContinuityFactory should be avoided in favor of just calling accessor methods on the ContinuousObject instance you are creating. That ensures that if a cached object were returned from the repository, it has the correct information. If the parameters passed to the constructor will never change and really need to be final in the ContinuousObject, then you have a good case to use it.
 
