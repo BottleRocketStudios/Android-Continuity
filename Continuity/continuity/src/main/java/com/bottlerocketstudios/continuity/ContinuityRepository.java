@@ -1,9 +1,11 @@
 package com.bottlerocketstudios.continuity;
 
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +31,11 @@ public class ContinuityRepository {
 
     private final String mThreadLock = "";
 
-    private final Map<Object, ContinuityId> mAnchoredContinuityIdMap = Collections.synchronizedMap(new WeakHashMap<Object, ContinuityId>());
+    private final Map<Object, List<ContinuityId>> mAnchoredContinuityIdMap = Collections.synchronizedMap(new WeakHashMap<Object, List<ContinuityId>>());
     private final Map<ContinuityId, ContinuityContainer> mHeterogenousCache = Collections.synchronizedMap(new TreeMap<ContinuityId, ContinuityContainer>());
+
     private final List<ContinuityId> mDeletionCandidates = new ArrayList<>(50);
+    private final List<ContinuityId> mAnchoredContinuityIdList = new ArrayList<>(50);
 
     private CleanupThread mThread;
 
@@ -91,7 +95,7 @@ public class ContinuityRepository {
     <T> T get(Object anchor, ContinuityId continuityId, long lifetimeMs) {
         ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityId);
         if (continuityContainer != null) {
-            mAnchoredContinuityIdMap.put(anchor, continuityId);
+            appendContinuityIdToAnchor(anchor, continuityId);
             continuityContainer.updateLifetimeMs(lifetimeMs);
             continuityContainer.setExpirationMs(0);
             touchCleanupThread();
@@ -102,13 +106,31 @@ public class ContinuityRepository {
 
     @SuppressWarnings("unchecked")
     <T> void put(ContinuityId continuityId, Object anchor, T instance, long lifetimeMs) {
-        mAnchoredContinuityIdMap.put(anchor, continuityId);
+        appendContinuityIdToAnchor(anchor, continuityId);
         mHeterogenousCache.put(continuityId, new ContinuityContainer(instance, lifetimeMs));
         touchCleanupThread();
     }
 
+    private void appendContinuityIdToAnchor(Object anchor, ContinuityId continuityId) {
+        List<ContinuityId> continuityIdCollection = mAnchoredContinuityIdMap.get(anchor);
+        if (continuityIdCollection == null) {
+            continuityIdCollection = new ArrayList<>();
+            mAnchoredContinuityIdMap.put(anchor, continuityIdCollection);
+        }
+        continuityIdCollection.add(continuityId);
+    }
+
+    /**
+     * This method will perform cleanup of any items that have lived past their lifetime without an anchor reference.
+     */
     private void performCleanup(CleanupThread cleanupThread) {
-        //Check for error state of more than the known thread calling us.
+        /*
+         *  Check for error state of more than the known thread calling us.
+         *  This operation is not threadsafe because class fields are used to contain lists modified
+         *  during this operation. These fields are reused to reduce GC churn at the expense of thread safety.
+         *
+         *  That isn't an issue because this method will only ever get called from the mThread loop.
+         */
         if (cleanupThread != mThread) {
             ContinuityLog.w(TAG, "Two threads were started");
             cleanupThread.stopRunning();
@@ -119,7 +141,7 @@ public class ContinuityRepository {
         //Reuse deletion candidate List to reduce GC churn on each iteration.
         mDeletionCandidates.clear();
         mDeletionCandidates.addAll(mHeterogenousCache.keySet());
-        mDeletionCandidates.removeAll(mAnchoredContinuityIdMap.values());
+        mDeletionCandidates.removeAll(getAnchoredContinuityIdCollection());
 
         //Walk the set of unanchored values and either set their expiration time or delete expired items.
         //Use for instead of foreach to reduce GC churn on iterator creation/destruction.
@@ -140,6 +162,17 @@ public class ContinuityRepository {
                 continuityContainer.setExpirationMs(SystemClock.uptimeMillis() + continuityContainer.getLifetimeMs());
             }
         }
+    }
+
+    @NonNull
+    private Collection<ContinuityId> getAnchoredContinuityIdCollection() {
+        //Reuse anchored list to reduce GC churn.
+        //Not thread safe. This is only called from performCleanup() which constrains it to a single thread.
+        mAnchoredContinuityIdList.clear();
+        for (List<ContinuityId> continuityIdList: mAnchoredContinuityIdMap.values()) {
+            mAnchoredContinuityIdList.addAll(continuityIdList);
+        }
+        return mAnchoredContinuityIdList;
     }
 
     boolean isEmpty() {
