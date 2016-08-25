@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.jfrog.artifactory-upload'
 
 group = "com.bottlerocketstudios"
-version = "1.0.0"
+version = "1.0.1"
 
 project.ext.artifactory_artifactid = "continuity"
 project.ext.artifactory_packaging = "jar"
@@ -131,6 +131,9 @@ install {
                     distribution 'repo'
                 }
             }
+        }
+        pom.whenConfigured { pom -> pom.dependencies = pom.dependencies.findAll {
+            dep -> !dep.artifactId.startsWith('support-v4') }
         }
     }
 }

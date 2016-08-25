@@ -133,7 +133,7 @@ Add the jcenter repository and include the library in your project with the comp
 
         dependencies {
             ...
-            compile 'com.bottlerocketstudios:continuity:1.0.0'
+            compile 'com.bottlerocketstudios:continuity:1.0.1'
         }
 
 In rare cases where you need to pull a snapshot build to help troubleshoot the develop branch, snapshots are hosted by JFrog. You should not ship a release using the snapshot library as the actual binary referenced by snapshot is going to change with every build of the develop branch. In the best case you will have irreproducible builds. In the worst case, human extinction. In some more likely middle case, you will have buggy or experimental code in your released app.
@@ -148,7 +148,7 @@ In rare cases where you need to pull a snapshot build to help troubleshoot the d
          
          dependencies {
             ...
-            compile 'com.bottlerocketstudios:continuity:1.1.0-SNAPSHOT'
+            compile 'com.bottlerocketstudios:continuity:1.0.2-SNAPSHOT'
          }
 
 ### Build

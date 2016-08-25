@@ -92,6 +92,7 @@ public class ContinuityRepository {
         notifyCacheOfDestruction(anchor);
         //Remove all anchored ContinuityIds associated with this anchor.
         mAnchoredContinuityIdMap.remove(anchor);
+        touchCleanupThread();
     }
 
     private void notifyCacheOfDestruction(Object anchor) {
@@ -127,6 +128,11 @@ public class ContinuityRepository {
     <T> void put(ContinuityId continuityId, Object anchor, T instance, long lifetimeMs) {
         appendContinuityIdToAnchor(anchor, continuityId);
         mHeterogenousCache.put(continuityId, new ContinuityContainer(instance, lifetimeMs));
+        touchCleanupThread();
+    }
+
+    void remove(ContinuityId continuityId) {
+        mHeterogenousCache.remove(continuityId);
         touchCleanupThread();
     }
 
@@ -231,10 +237,6 @@ public class ContinuityRepository {
         } else {
             ContinuityLog.w(TAG, "An unexpected thread was shutdown");
         }
-    }
-
-    public void remove(ContinuityId continuityId) {
-        mHeterogenousCache.remove(continuityId);
     }
 
     private class CleanupThread extends Thread {
