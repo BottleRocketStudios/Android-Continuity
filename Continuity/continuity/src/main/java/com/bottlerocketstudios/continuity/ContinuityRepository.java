@@ -29,7 +29,7 @@ public class ContinuityRepository {
 
     private final String mThreadLock = "";
 
-    private final WeakHashMap<Object, ContinuityId> mAnchoredContinuityIdMap = new WeakHashMap<>();
+    private final Map<Object, ContinuityId> mAnchoredContinuityIdMap = Collections.synchronizedMap(new WeakHashMap<Object, ContinuityId>());
     private final Map<ContinuityId, ContinuityContainer> mHeterogenousCache = Collections.synchronizedMap(new TreeMap<ContinuityId, ContinuityContainer>());
     private final List<ContinuityId> mDeletionCandidates = new ArrayList<>(50);
 
@@ -67,8 +67,24 @@ public class ContinuityRepository {
         ContinuityLog.setMinLoggingLevel(loggingLevel);
     }
 
+    /**
+     * Thre primary interface for the ContinuityRepository. Use this method to construct or retrieve
+     * a continuous object.
+     *
+     * @param anchor            The object to anchor this instance to, it will remain available while this anchor is in memory.
+     * @param continuousClass   The class which you wish to make continuous across creation and destruction of anchor instances.
+     * @param <T>               The type of the continuous object.
+     * @return                  A new or cached instance of the continuous object. You should always assume you are getting a cached instance.
+     */
     public <T> ContinuityBuilder<T> with(Object anchor, Class<T> continuousClass) {
         return new ContinuityBuilder<>(this, anchor, continuousClass, mDefaultLifetimeMs);
+    }
+
+    /**
+     * Explicitly notify that this anchor is going out of scope so that references can be removed after lifetime timeout.
+     */
+    public void onDestroy(Object anchor) {
+        mAnchoredContinuityIdMap.remove(anchor);
     }
 
     @SuppressWarnings("unchecked")

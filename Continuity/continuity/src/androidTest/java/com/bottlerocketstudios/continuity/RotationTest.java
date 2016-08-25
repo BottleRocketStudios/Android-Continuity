@@ -48,6 +48,21 @@ public class RotationTest extends ContinuityTest {
     }
 
     @Test
+    public void testRotationRemovalPastLifetimeWithOnDestroy() {
+        int taskId = SequentialNumberGenerator.generateNumber();
+        TestAnchor testAnchor = new TestAnchor();
+        ContinuousTestClass beforeRotation = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).build();
+
+        getContinuityRepository().onDestroy(testAnchor);
+        SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS + ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS * 2);
+
+        ContinuousTestClass afterRotation = getUnanchoredContinuousTestClass(taskId);
+
+        Assert.assertNotEquals("Instance was retained after expiration", beforeRotation, afterRotation);
+        Assert.assertTrue("Original instance was not notified of being discarded", beforeRotation.isDiscarded());
+    }
+
+    @Test
     public void testRetentionPastLifetime() {
         int taskId = SequentialNumberGenerator.generateNumber();
         TestAnchor testAnchor = new TestAnchor();
