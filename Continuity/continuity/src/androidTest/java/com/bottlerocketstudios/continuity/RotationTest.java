@@ -54,6 +54,7 @@ public class RotationTest extends ContinuityTest {
         ContinuousTestClass beforeRotation = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).task(taskId).build();
 
         getContinuityRepository().onDestroy(testAnchor);
+        Assert.assertTrue("Original instance was not notified of being destroyed", beforeRotation.isDestroyed());
         SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS - ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS);
 
         ContinuousTestClass afterRotation = getUnanchoredContinuousTestClass(taskId);
@@ -68,6 +69,7 @@ public class RotationTest extends ContinuityTest {
         ContinuousTestClass beforeRotation = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).task(taskId).build();
 
         getContinuityRepository().onDestroy(testAnchor);
+        Assert.assertTrue("Original instance was not notified of being destroyed", beforeRotation.isDestroyed());
         SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS + ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS * 2);
 
         ContinuousTestClass afterRotation = getUnanchoredContinuousTestClass(taskId);

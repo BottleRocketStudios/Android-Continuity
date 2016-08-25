@@ -11,6 +11,7 @@ public class ContinuousTestClass implements ContinuousObject {
 
     private final long mCreationTimestamp;
     private boolean mDiscarded;
+    private boolean mDestroyed;
 
     public ContinuousTestClass() {
         mCreationTimestamp = SystemClock.uptimeMillis();
@@ -21,11 +22,20 @@ public class ContinuousTestClass implements ContinuousObject {
     }
 
     @Override
+    public void onContinuityAnchorDestroyed(Object anchor) {
+        mDestroyed = true;
+    }
+
+    @Override
     public void onContinuityDiscard() {
         mDiscarded = true;
     }
 
     public boolean isDiscarded() {
         return mDiscarded;
+    }
+
+    public boolean isDestroyed() {
+        return mDestroyed;
     }
 }

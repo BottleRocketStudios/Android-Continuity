@@ -30,6 +30,11 @@ Create a presenter class somewhere and be sure it implements ContinuousObject if
 			onContinuityDiscard() {
 				//Disconnect anything you are observing, cancel operations, etc.
 			}
+			
+			@Override
+			onContinuityAnchorDestroyed(Object anchor) {
+			    //Remove any references from this presenter to the anchor.
+			}
 		}
 
 #### Activity
@@ -61,7 +66,9 @@ Fragments are a very slightly different case. You should wait until the result o
 **NOTE:** This will not be the same instance that was provided to the Activity in the example above even if the Fragment is attached to that Activity. If you want them to receive the same Presenter(not recommended) pass the Activity instance as the Anchor for both calls. You shouldn't share Presenters or really any other object this way.
 
 #### Cleanup 
-**IMPORTANT:** In your BaseActivity and BaseFragment or any one-off Fragments/DialogFragments it is a best practice to cleanup your anchor manually in the onDestroy method.
+**IMPORTANT:** In your BaseActivity and BaseFragment or any one-off Fragments/DialogFragments it is a best practice to cleanup your anchor manually in the onDestroy method. 
+
+This will call the onContinuityAnchorDestroyed(anchor) method on any objects that implement the ContinuousObject interface.
 
         @Override
         public void onDestroy() {

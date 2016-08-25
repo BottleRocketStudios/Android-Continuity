@@ -88,7 +88,26 @@ public class ContinuityRepository {
      * Explicitly notify that this anchor is going out of scope so that references can be removed after lifetime timeout.
      */
     public void onDestroy(Object anchor) {
+        //Notify all of the ContinuousObjects associated with this anchor.
+        notifyCacheOfDestruction(anchor);
+        //Remove all anchored ContinuityIds associated with this anchor.
         mAnchoredContinuityIdMap.remove(anchor);
+    }
+
+    private void notifyCacheOfDestruction(Object anchor) {
+        //First create a shallow copy of ids.
+        List<ContinuityId> continuityIdList = new ArrayList<>(mAnchoredContinuityIdMap.get(anchor));
+        for (int i = 0; i < continuityIdList.size(); i++) {
+            ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityIdList.get(i));
+            //Ensure cache contains object
+            if (continuityContainer != null) {
+                //If it is a ContinuousObject, notify it of the destroyed anchor.
+                Object object = continuityContainer.getObject();
+                if (object instanceof ContinuousObject) {
+                    ((ContinuousObject) object).onContinuityAnchorDestroyed(anchor);
+                }
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
