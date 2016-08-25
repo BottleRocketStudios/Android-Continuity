@@ -1,1 +1,1 @@
-include ':continuity', ':continuitysample'
+include ':continuity'

@@ -25,7 +25,7 @@ public class RotationTest extends ContinuityTest {
 
         createMemoryPressure();
         System.gc();
-        SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS - 500);
+        SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS - ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS);
 
         ContinuousTestClass afterRotation = getUnanchoredContinuousTestClass(taskId);
 
@@ -48,12 +48,28 @@ public class RotationTest extends ContinuityTest {
     }
 
     @Test
+    public void testRetentionUnderLifetimeWithOnDestroy() {
+        int taskId = SequentialNumberGenerator.generateNumber();
+        TestAnchor testAnchor = new TestAnchor();
+        ContinuousTestClass beforeRotation = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).task(taskId).build();
+
+        getContinuityRepository().onDestroy(testAnchor);
+        Assert.assertTrue("Original instance was not notified of being destroyed", beforeRotation.isDestroyed());
+        SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS - ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS);
+
+        ContinuousTestClass afterRotation = getUnanchoredContinuousTestClass(taskId);
+
+        Assert.assertEquals("Instance was not retained after rotation", beforeRotation, afterRotation);
+    }
+
+    @Test
     public void testRotationRemovalPastLifetimeWithOnDestroy() {
         int taskId = SequentialNumberGenerator.generateNumber();
         TestAnchor testAnchor = new TestAnchor();
-        ContinuousTestClass beforeRotation = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).build();
+        ContinuousTestClass beforeRotation = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).task(taskId).build();
 
         getContinuityRepository().onDestroy(testAnchor);
+        Assert.assertTrue("Original instance was not notified of being destroyed", beforeRotation.isDestroyed());
         SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS + ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS * 2);
 
         ContinuousTestClass afterRotation = getUnanchoredContinuousTestClass(taskId);

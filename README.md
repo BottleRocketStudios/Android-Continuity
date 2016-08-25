@@ -30,6 +30,11 @@ Create a presenter class somewhere and be sure it implements ContinuousObject if
 			onContinuityDiscard() {
 				//Disconnect anything you are observing, cancel operations, etc.
 			}
+			
+			@Override
+			onContinuityAnchorDestroyed(Object anchor) {
+			    //Remove any references from this presenter to the anchor.
+			}
 		}
 
 #### Activity
@@ -47,19 +52,36 @@ Now in your Activity whenever you are ready to get the object.
 That is it! The first time the Activity is created for a specific Android Task you will get a new instance. From that point onward until the Activity has been garbage collected for a specified amount of time, you will get the same MyPresenter Object.
 
 #### Fragment
-Fragments are a slightly different case. Because the Android Task ID is unknown until it is attached to the Activity, you have to use the onActivityCreated method to properly identify the Android Task. 
+Fragments are a very slightly different case. You should wait until the result of getActivity() will not be null after onAttach() to ensure that the library can get the Activity's task id. 
 
-		@Override
-		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-	        super.onActivityCreated(savedInstanceState);
-	        //Do anything else you need to do here.
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            //Inflate layouts, etc.
 
-			//Use this Fragment as the Anchor, and create or fetch an instance of MyPresenter
-			MyPresenter myPresenter = continuityRepository.with(this, MyPresenter.class).build();
-	    }
+            //Use this Fragment as the Anchor, and create or fetch an instance of MyPresenter
+            MyPresenter myPresenter = continuityRepository.with(this, MyPresenter.class).build();
+        }
 		
 **NOTE:** This will not be the same instance that was provided to the Activity in the example above even if the Fragment is attached to that Activity. If you want them to receive the same Presenter(not recommended) pass the Activity instance as the Anchor for both calls. You shouldn't share Presenters or really any other object this way.
 
+#### Cleanup 
+**IMPORTANT:** In your BaseActivity and BaseFragment or any one-off Fragments/DialogFragments it is a best practice to cleanup your anchor manually in the onDestroy method. 
+
+This will call the onContinuityAnchorDestroyed(anchor) method on any objects that implement the ContinuousObject interface.
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            continuityRepository.onDestroy(this);
+        }
+
+It is very easy to accidentally leak the UI by e.g. having the UI implement a Listener interface held by the Presenter. If you don't manually clean that Presenter->UI reference, it can leak the UI. 
+
+        Singleton-ish(DI, ServiceLocator, Whatever) -> ContinuityRepository -> Presenter -> UI 
+        
+By calling ContinuityRepository.onDestroy(anchor) the ContinuityRepository->Presenter link will be broken **after** the lifetime has expired. It is still recommended that you notify your Presenter that your UI has been destroyed so that it can remove the listener reference and is not making calls against a dead UI element. This also expedites GC of the UI among countless other benefits.
+	
 #### Changing Defaults
 If the default timeouts are not acceptable, you can specify your own in the ContinuityRepository constructor. You can even have many ContinuousRepository instances with different timings, but that may become hard to manage. You can also override the lifetime of a single ContinuousObject by specifying a different lifetime in the builder. 
 
