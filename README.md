@@ -80,7 +80,7 @@ It is very easy to accidentally leak the UI by e.g. having the UI implement a Li
 
         Singleton-ish(DI, ServiceLocator, Whatever) -> ContinuityRepository -> Presenter -> UI 
         
-By calling ContinuityRepository.onDestroy(anchor) the ContinuityRepository->Presenter link will be broken **after** the lifetime has expired. It is still recommended that you notify your Presenter that your UI has been destroyed so that it can remove the listener reference and is not making calls against a dead UI element. This also expedites GC of the UI among countless other benefits.
+By calling ContinuityRepository.onDestroy(anchor) the ContinuityRepository->Presenter link will be broken **after** the lifetime has expired. It is still recommended that your presenter implements ContinuousObject so that when your UI has been destroyed it can remove any references to the dead UI element. This also expedites GC of the UI among countless other benefits.
 	
 #### Changing Defaults
 If the default timeouts are not acceptable, you can specify your own in the ContinuityRepository constructor. You can even have many ContinuousRepository instances with different timings, but that may become hard to manage. You can also override the lifetime of a single ContinuousObject by specifying a different lifetime in the builder. 
