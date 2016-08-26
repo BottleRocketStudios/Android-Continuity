@@ -95,18 +95,31 @@ public class ContinuityRepository {
         touchCleanupThread();
     }
 
-    private void notifyCacheOfDestruction(Object anchor) {
+    private void notifyCacheOfDestruction(@NonNull Object anchor) {
         //First create a shallow copy of ids.
         List<ContinuityId> continuityIdList = new ArrayList<>(mAnchoredContinuityIdMap.get(anchor));
         for (int i = 0; i < continuityIdList.size(); i++) {
             ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityIdList.get(i));
+            notifyDestruction(anchor, continuityContainer);
+        }
+    }
+
+    private void notifyDestruction(Object anchor, ContinuityContainer continuityContainer) {
+        if (continuityContainer != null) {
+            //If it is a ContinuousObject, notify it of the destroyed anchor.
+            Object object = continuityContainer.getObject();
+            if (object instanceof ContinuousObject) {
+                ((ContinuousObject) object).onContinuityAnchorDestroyed(anchor);
+            }
+        }
+    }
+
+    private void notifyDiscard(ContinuityContainer continuityContainer) {
+        if (continuityContainer != null) {
             //Ensure cache contains object
-            if (continuityContainer != null) {
-                //If it is a ContinuousObject, notify it of the destroyed anchor.
-                Object object = continuityContainer.getObject();
-                if (object instanceof ContinuousObject) {
-                    ((ContinuousObject) object).onContinuityAnchorDestroyed(anchor);
-                }
+            Object object = continuityContainer.getObject();
+            if (object instanceof ContinuousObject) {
+                ((ContinuousObject) object).onContinuityDiscard();
             }
         }
     }
@@ -132,8 +145,19 @@ public class ContinuityRepository {
     }
 
     void remove(ContinuityId continuityId) {
-        mHeterogenousCache.remove(continuityId);
+        ContinuityContainer continuityContainer = mHeterogenousCache.remove(continuityId);
+        notifyDiscard(continuityContainer);
         touchCleanupThread();
+    }
+
+    void destroyThenRemove(Object anchor, ContinuityId continuityId) {
+        List<ContinuityId> continuityIdList = mAnchoredContinuityIdMap.get(anchor);
+        if (continuityIdList != null) {
+            continuityIdList.remove(continuityId);
+        }
+        ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityId);
+        notifyDestruction(anchor, continuityContainer);
+        remove(continuityId);
     }
 
     private void appendContinuityIdToAnchor(Object anchor, ContinuityId continuityId) {
@@ -177,10 +201,7 @@ public class ContinuityRepository {
                 if (continuityContainer.getExpirationMs() < SystemClock.uptimeMillis()) {
                     //Past deadline, delete it
                     mHeterogenousCache.remove(continuityId);
-                    Object retainedObject = continuityContainer.getObject();
-                    if (retainedObject instanceof ContinuousObject) {
-                        ((ContinuousObject) retainedObject).onContinuityDiscard();
-                    }
+                    notifyDiscard(continuityContainer);
                 }
             } else {
                 //Set expiration deadline.

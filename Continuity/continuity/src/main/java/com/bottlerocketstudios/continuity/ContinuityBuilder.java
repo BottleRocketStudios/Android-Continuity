@@ -69,6 +69,11 @@ public class ContinuityBuilder<T> {
         mContinuityRepository.remove(continuityId);
     }
 
+    public void destroyThenRemove() {
+        ContinuityId continuityId = createContinuityId();
+        mContinuityRepository.destroyThenRemove(mAnchor, continuityId);
+    }
+
     private T createInstance() {
         if (mContinuityFactory != null) {
             return mContinuityFactory.create();
