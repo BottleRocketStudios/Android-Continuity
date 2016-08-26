@@ -115,8 +115,13 @@ If you really need to ensure that an instance of a ContinuousObject is no longer
 
 		//Or for the Builder Options example above. 
 		continuousRepository.with(this, ExampleTestClass.class).task(1234).tag("example1").remove();
+		
+		//If you want to have the ContinuousObject notified of anchor destruction and manually removed
+		continuousRepository.with(this, MyPresenter.class).destroyThenRemove();
 
 Any other optional attributes you used to distinguish the ContinuousId in the original builder like a different task or tag must be provided as well. You do not need to provide the ContinuityFactory even if you used one to create the original object, it will never be called in a removal and is irrelevant. 
+
+The last example allows your to have similar functionality to calling continuousRepository.onDestroy(this) except that you are explicitly removing a single specific ContinuousObject immediately and also allowing it to perform any work it needs to do in onContinuityAnchorDestroyed. Other ContinuousObjects associated with the same anchor will not be notified and will be retained in the normal way. This should be pretty rare, but the tool is there if you need it.
 
 #### Sample Application
 Look in this repository for a sample application that demonstrates the use of this library along with the MVVMP design pattern enabled by the release of Android DataBinding. 

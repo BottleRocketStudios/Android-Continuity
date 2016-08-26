@@ -14,6 +14,32 @@ import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <p>
+ * The ContinuityRepository is the core of the library and manages creation and retention of ContinuousObjects.
+ * Typically you should create one instance centrally and reuse it in all of your Activities
+ * and Fragments. Each instance will have a Thread associated with it that will automatically stop
+ * running while idle or empty.
+ * </p>
+ * <p>
+ * The default timings are available as public constants in this object. If you wish to modify the
+ * timing values, use the provided constructor.
+ * </p>
+ * <p>
+ * Use the {@link #with(Object, Class)} method to create a {@link ContinuityBuilder} and proceed from
+ * there.
+ * </p>
+ * <p>
+ * This object will retain a weak reference to the anchor give to the {@link #with(Object, Class)} method
+ * allowing the anchor object to be garbage collected. At that point the associated ContinuousObject will
+ * be discarded after its lifetime expires. However, it is very easy to leak this anchor object so
+ * it is a good idea, though not strictly required, that you call {@link #onDestroy(Object)} with the
+ * same anchor you used in the {@link #with(Object, Class)} command to clean up when your Activity
+ * or Fragment is Destroyed.
+ * </p>
+ * <p>
+ * See the README.md file included with this project in the source code repository for more details and examples.
+ * </p>
+ *
  * Created on 8/22/16.
  */
 public class ContinuityRepository {
@@ -65,7 +91,9 @@ public class ContinuityRepository {
     }
 
     /**
-     * Set from {@link Log#VERBOSE} to {@link Log#ERROR} to prevent logging anything below that level of importance.
+     * Change minimum logging importance level, skipping anything below that level of importance.
+     *
+     * @param loggingLevel Value between {@link Log#VERBOSE} to {@link Log#ERROR}
      */
     public void setMinLoggingLevel(int loggingLevel) {
         ContinuityLog.setMinLoggingLevel(loggingLevel);
@@ -73,12 +101,12 @@ public class ContinuityRepository {
 
     /**
      * Thre primary interface for the ContinuityRepository. Use this method to construct or retrieve
-     * a continuous object.
+     * a ContinuousObject.
      *
      * @param anchor            The object to anchor this instance to, it will remain available while this anchor is in memory.
      * @param continuousClass   The class which you wish to make continuous across creation and destruction of anchor instances.
-     * @param <T>               The type of the continuous object.
-     * @return                  A new or cached instance of the continuous object. You should always assume you are getting a cached instance.
+     * @param <T>               The type of the ContinuousObject.
+     * @return                  A new ContinuityBuilder associated with the supplied anchor that will build an instance of the continuousClass.
      */
     public <T> ContinuityBuilder<T> with(Object anchor, Class<T> continuousClass) {
         return new ContinuityBuilder<>(this, anchor, continuousClass, mDefaultLifetimeMs);
@@ -86,6 +114,8 @@ public class ContinuityRepository {
 
     /**
      * Explicitly notify that this anchor is going out of scope so that references can be removed after lifetime timeout.
+     *
+     * @param anchor The anchor object which is being destroyed.
      */
     public void onDestroy(Object anchor) {
         //Notify all of the ContinuousObjects associated with this anchor.
@@ -95,18 +125,31 @@ public class ContinuityRepository {
         touchCleanupThread();
     }
 
-    private void notifyCacheOfDestruction(Object anchor) {
+    private void notifyCacheOfDestruction(@NonNull Object anchor) {
         //First create a shallow copy of ids.
         List<ContinuityId> continuityIdList = new ArrayList<>(mAnchoredContinuityIdMap.get(anchor));
         for (int i = 0; i < continuityIdList.size(); i++) {
             ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityIdList.get(i));
+            notifyDestruction(anchor, continuityContainer);
+        }
+    }
+
+    private void notifyDestruction(Object anchor, ContinuityContainer continuityContainer) {
+        if (continuityContainer != null) {
+            //If it is a ContinuousObject, notify it of the destroyed anchor.
+            Object object = continuityContainer.getObject();
+            if (object instanceof ContinuousObject) {
+                ((ContinuousObject) object).onContinuityAnchorDestroyed(anchor);
+            }
+        }
+    }
+
+    private void notifyDiscard(ContinuityContainer continuityContainer) {
+        if (continuityContainer != null) {
             //Ensure cache contains object
-            if (continuityContainer != null) {
-                //If it is a ContinuousObject, notify it of the destroyed anchor.
-                Object object = continuityContainer.getObject();
-                if (object instanceof ContinuousObject) {
-                    ((ContinuousObject) object).onContinuityAnchorDestroyed(anchor);
-                }
+            Object object = continuityContainer.getObject();
+            if (object instanceof ContinuousObject) {
+                ((ContinuousObject) object).onContinuityDiscard();
             }
         }
     }
@@ -132,8 +175,19 @@ public class ContinuityRepository {
     }
 
     void remove(ContinuityId continuityId) {
-        mHeterogenousCache.remove(continuityId);
+        ContinuityContainer continuityContainer = mHeterogenousCache.remove(continuityId);
+        notifyDiscard(continuityContainer);
         touchCleanupThread();
+    }
+
+    void destroyThenRemove(Object anchor, ContinuityId continuityId) {
+        List<ContinuityId> continuityIdList = mAnchoredContinuityIdMap.get(anchor);
+        if (continuityIdList != null) {
+            continuityIdList.remove(continuityId);
+        }
+        ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityId);
+        notifyDestruction(anchor, continuityContainer);
+        remove(continuityId);
     }
 
     private void appendContinuityIdToAnchor(Object anchor, ContinuityId continuityId) {
@@ -177,10 +231,7 @@ public class ContinuityRepository {
                 if (continuityContainer.getExpirationMs() < SystemClock.uptimeMillis()) {
                     //Past deadline, delete it
                     mHeterogenousCache.remove(continuityId);
-                    Object retainedObject = continuityContainer.getObject();
-                    if (retainedObject instanceof ContinuousObject) {
-                        ((ContinuousObject) retainedObject).onContinuityDiscard();
-                    }
+                    notifyDiscard(continuityContainer);
                 }
             } else {
                 //Set expiration deadline.
