@@ -118,6 +118,7 @@ public class ContinuityRepository {
      * @param anchor The anchor object which is being destroyed.
      */
     public void onDestroy(Object anchor) {
+        if (anchor == null) return;
         //Notify all of the ContinuousObjects associated with this anchor.
         notifyCacheOfDestruction(anchor);
         //Remove all anchored ContinuityIds associated with this anchor.
@@ -126,11 +127,14 @@ public class ContinuityRepository {
     }
 
     private void notifyCacheOfDestruction(@NonNull Object anchor) {
-        //First create a shallow copy of ids.
-        List<ContinuityId> continuityIdList = new ArrayList<>(mAnchoredContinuityIdMap.get(anchor));
-        for (int i = 0; i < continuityIdList.size(); i++) {
-            ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityIdList.get(i));
-            notifyDestruction(anchor, continuityContainer);
+        List<ContinuityId> continuityIdList = mAnchoredContinuityIdMap.get(anchor);
+        if (continuityIdList != null) {
+            //First create a shallow copy of ids.
+            List<ContinuityId> continuityIdSnapshot = new ArrayList<>(continuityIdList);
+            for (int i = 0; i < continuityIdSnapshot.size(); i++) {
+                ContinuityContainer continuityContainer = mHeterogenousCache.get(continuityIdSnapshot.get(i));
+                notifyDestruction(anchor, continuityContainer);
+            }
         }
     }
 
