@@ -1,5 +1,7 @@
 package com.bottlerocketstudios.continuity;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -45,9 +47,9 @@ import java.util.concurrent.TimeUnit;
 public class ContinuityRepository {
     private final String TAG = ContinuityRepository.class.getSimpleName() + " " + this.hashCode();
 
-    public static final long DEFAULT_CHECK_INTERVAL_MS = 500;
+    public static final long DEFAULT_CHECK_INTERVAL_MS = 250;
     public static final long DEFAULT_IDLE_SHUTDOWN_MS = TimeUnit.SECONDS.toMillis(30);
-    public static final long DEFAULT_LIFETIME_MS = TimeUnit.SECONDS.toMillis(2);
+    public static final long DEFAULT_LIFETIME_MS = TimeUnit.SECONDS.toMillis(1);
     public static final int DEFAULT_MAX_EMPTY_ITERATIONS = 10;
 
     private final long mCheckIntervalMs;
@@ -114,11 +116,34 @@ public class ContinuityRepository {
 
     /**
      * Explicitly notify that this anchor is going out of scope so that references can be removed after lifetime timeout.
+     * If the anchor supplied is a Fragment or Activity that is finishing, it will be an immediate removal without waiting
+     * for lifetime timout.
      *
      * @param anchor The anchor object which is being destroyed.
      */
     public void onDestroy(Object anchor) {
         if (anchor == null) return;
+        if (isFinishing(anchor)) {
+            ContinuityLog.i(TAG, "Finishing");
+            destroyThenRemoveAll(anchor);
+        } else {
+            ContinuityLog.i(TAG, "Destroying");
+            destroy(anchor);
+        }
+    }
+
+    private boolean isFinishing(Object anchor) {
+        if (anchor instanceof Activity) {
+            return ((Activity) anchor).isFinishing();
+        } else if (anchor instanceof Fragment) {
+            return ((Fragment) anchor).getActivity() != null && ((Fragment) anchor).getActivity().isFinishing();
+        } else if (anchor instanceof android.support.v4.app.Fragment){
+            return ((android.support.v4.app.Fragment) anchor).getActivity() != null && ((android.support.v4.app.Fragment) anchor).getActivity().isFinishing();
+        }
+        return false;
+    }
+
+    private void destroy(Object anchor) {
         //Notify all of the ContinuousObjects associated with this anchor.
         notifyCacheOfDestruction(anchor);
         //Remove all anchored ContinuityIds associated with this anchor.
@@ -182,6 +207,13 @@ public class ContinuityRepository {
         ContinuityContainer continuityContainer = mHeterogenousCache.remove(continuityId);
         notifyDiscard(continuityContainer);
         touchCleanupThread();
+    }
+
+    private void destroyThenRemoveAll(Object anchor) {
+        List<ContinuityId> continuityIdList = new ArrayList<>(mAnchoredContinuityIdMap.get(anchor));
+        for (int i=0; i < continuityIdList.size(); i++) {
+            destroyThenRemove(anchor, continuityIdList.get(i));
+        }
     }
 
     void destroyThenRemove(Object anchor, ContinuityId continuityId) {

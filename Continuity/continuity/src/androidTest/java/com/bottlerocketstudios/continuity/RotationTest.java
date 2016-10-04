@@ -37,11 +37,17 @@ public class RotationTest extends ContinuityTest {
         int taskId = SequentialNumberGenerator.generateNumber();
         ContinuousTestClass beforeRotation = getUnanchoredContinuousTestClass(taskId);
 
-        createMemoryPressure();
-        System.gc();
-        SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS + ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS * 2);
+        ContinuousTestClass afterRotation = null;
+        int i = 0;
+        while (i < 5) {
+            createMemoryPressure();
+            System.gc();
+            SafeWait.safeWait(ContinuityRepository.DEFAULT_LIFETIME_MS + ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS * 2);
 
-        ContinuousTestClass afterRotation = getUnanchoredContinuousTestClass(taskId);
+            afterRotation = getUnanchoredContinuousTestClass(taskId);
+            if (beforeRotation != afterRotation) break;
+            i++;
+        }
 
         Assert.assertNotEquals("Instance was retained after expiration", beforeRotation, afterRotation);
         Assert.assertTrue("Original instance was not notified of being discarded", beforeRotation.isDiscarded());

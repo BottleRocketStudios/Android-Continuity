@@ -44,16 +44,19 @@ public class TestShutdownTimeouts extends ContinuityTest {
         int taskId = SequentialNumberGenerator.generateNumber();
         TestAnchor testAnchor = new TestAnchor();
 
-        ContinuousTestClass oldReference = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).task(taskId).build();
+        long fastTimeoutMs = 5000;
+        ContinuityRepository fastTimeoutRepository = new ContinuityRepository(ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS, fastTimeoutMs, ContinuityRepository.DEFAULT_LIFETIME_MS, ContinuityRepository.DEFAULT_MAX_EMPTY_ITERATIONS);
+
+        ContinuousTestClass oldReference = fastTimeoutRepository.with(testAnchor, ContinuousTestClass.class).task(taskId).build();
 
         int emptyPasses = 0;
-        while(getContinuityRepository().isRunning() && emptyPasses < 2) {
-            SafeWait.safeWait(ContinuityRepository.DEFAULT_IDLE_SHUTDOWN_MS + ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS);
+        while(fastTimeoutRepository.isRunning() && emptyPasses < 2) {
+            SafeWait.safeWait(fastTimeoutMs + ContinuityRepository.DEFAULT_CHECK_INTERVAL_MS);
             emptyPasses++;
         }
-        Assert.assertFalse("Repository was still running after being idle for too long.", getContinuityRepository().isRunning());
+        Assert.assertFalse("Repository was still running after being idle for too long.", fastTimeoutRepository.isRunning());
 
-        ContinuousTestClass newReference = getContinuityRepository().with(testAnchor, ContinuousTestClass.class).task(taskId).build();
+        ContinuousTestClass newReference = fastTimeoutRepository.with(testAnchor, ContinuousTestClass.class).task(taskId).build();
         Assert.assertEquals("Object was cleaned while a strong anchor was held", oldReference, newReference);
     }
 
