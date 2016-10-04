@@ -42,6 +42,20 @@ public class ActivityLifecycleTest extends ContinuityTest {
         Assert.assertTrue("Object was not notified of discard", continuousTestClassContainer.getValue().isDiscarded());
     }
 
+    @Test
+    public void testFinishingWithoutUse() {
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                FinishingActivity activity = new FinishingActivity();
+                ContinuityRepository continuityRepository = getContinuityRepository();
+                activity.setContinuityRepository(continuityRepository);
+                activity.simulateFinish();
+            }
+        });
+    }
+
     private static class Container<T> {
         private T mValue;
 

@@ -210,9 +210,13 @@ public class ContinuityRepository {
     }
 
     private void destroyThenRemoveAll(Object anchor) {
-        List<ContinuityId> continuityIdList = new ArrayList<>(mAnchoredContinuityIdMap.get(anchor));
-        for (int i=0; i < continuityIdList.size(); i++) {
-            destroyThenRemove(anchor, continuityIdList.get(i));
+        List<ContinuityId> continuityIdList = mAnchoredContinuityIdMap.get(anchor);
+        if (continuityIdList != null) {
+            //First create a shallow copy of ids.
+            List<ContinuityId> continuityIdSnapshot = new ArrayList<>(continuityIdList);
+            for (int i = 0; i < continuityIdSnapshot.size(); i++) {
+                destroyThenRemove(anchor, continuityIdSnapshot.get(i));
+            }
         }
     }
 
