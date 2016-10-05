@@ -136,9 +136,9 @@ public class ContinuityRepository {
         if (anchor instanceof Activity) {
             return ((Activity) anchor).isFinishing();
         } else if (anchor instanceof Fragment) {
-            return ((Fragment) anchor).getActivity() != null && ((Fragment) anchor).getActivity().isFinishing();
+            return (((Fragment) anchor).isRemoving() || ((Fragment) anchor).getActivity() != null && ((Fragment) anchor).getActivity().isFinishing());
         } else if (anchor instanceof android.support.v4.app.Fragment){
-            return ((android.support.v4.app.Fragment) anchor).getActivity() != null && ((android.support.v4.app.Fragment) anchor).getActivity().isFinishing();
+            return ((android.support.v4.app.Fragment) anchor).isRemoving() || (((android.support.v4.app.Fragment) anchor).getActivity() != null && ((android.support.v4.app.Fragment) anchor).getActivity().isFinishing());
         }
         return false;
     }
