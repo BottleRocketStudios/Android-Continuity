@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Legislator</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="dialog_error_title">We\'re Sorry</string>
+
+    <string name="flf_empty_message">You do not have any favorite legislators.</string>
+
+    <string name="legislator_full_name_format_with_nickname">%1$s \"%2$s\" %3$s</string>
+    <string name="legislator_full_name_format">%1$s %2$s</string>
+
+    <string name="lsa_label">Legislator Search</string>
+    <string name="lsif_name_hint">Legislator Name</string>
+    <string name="lsif_search_name">Search by Name</string>
+    <string name="lsif_zip_hint">Zip Code</string>
+    <string name="lsif_search_zip">Search by Zip Code</string>
+    <string name="lsif_search_location">Search Your Location</string>
+    <string name="lsif_name_error">Name must be at least two characters</string>
+    <string name="lsif_zip_error">Use a 5 digit zip code</string>
+
+    <string name="lsrf_empty_message">No legislators were found</string>
+    <string name="lsrf_permanent_location_permission_failure">Location permissions have been permanently denied. Please use the application settings screen to enable location permission.</string>
+    <string name="lsrf_temporary_location_permission_failure">Location permission was denied. The app cannot find legislators for your location.</string>
+    <string name="lsrf_location_setting_failure">You must enable location on your phone before this feature will work.</string>
+    <string name="lsrf_play_services_failure">Google Play Services had an unrecoverable error. Please ensure you are running the latest Google Play Services.</string>
+    <string name="lsrf_permission_rationale">In order to find your location, you must allow location permissions for this app.</string>
+    <string name="lsrf_unexpected_data">The server returned unexpected results.</string>
+    <string name="lsrf_network_error">Check your Internet connection.</string>
+    <string name="lsrf_play_services_failure_title">Play Services</string>
+    <string name="lsrf_location_setting_failure_title">Location Settings</string>
+    <string name="lsrf_location_permission_title">Location Permission</string>
+    <string name="legislator_party_and_state">%1$s - %2$s</string>
+
+    <string translatable="false" name="transition_legislator_detail">transitionLegislatorDetail</string>
+    <string name="ldf_view_govtrack_report">View Govtrack Report</string>
+</resources>

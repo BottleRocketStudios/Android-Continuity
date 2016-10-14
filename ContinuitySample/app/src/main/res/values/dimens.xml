@@ -1,0 +1,13 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="sdf_item_spacing">16dp</dimen>
+    <dimen name="legislator_item_name_size">20sp</dimen>
+    <dimen name="legislator_item_detail_size">18sp</dimen>
+    <dimen name="legislator_detail_name_size">22sp</dimen>
+    <dimen name="legislator_detail_margin">8dp</dimen>
+    <dimen name="legislator_detail_normal_size">16sp</dimen>
+    <dimen name="ic_social_icon">80dp</dimen>
+</resources>

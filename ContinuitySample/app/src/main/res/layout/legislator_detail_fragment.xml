@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="presenter"
+            type="com.bottlerocketstudios.continuitysample.legislator.presenter.LegislatorDetailPresenter"/>
+        <variable
+            name="legislator"
+            type="com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorViewModel"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:transitionName="@string/transition_legislator_detail"
+            android:background="@drawable/us_flag_blurred"
+            android:elevation="4dp"
+            app:imageUrl="@{legislator.imageUrl}"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/legislator_detail_margin"
+                android:textStyle="bold"
+                android:textSize="@dimen/legislator_detail_name_size"
+                android:text="@{legislator.formatFullName(context)}"
+                tools:text="James Bottomtooth"/>
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_star_white_48dp"
+                android:layout_margin="@dimen/legislator_detail_margin"
+                android:tint="@{legislator.getFavoriteDrawableTint(context, legislator.favorite)}"
+                android:onClick="@{()->presenter.favoriteTapped(legislator)}"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/legislator_detail_margin"
+            android:textSize="@dimen/legislator_detail_normal_size"
+            android:text="@{legislator.chamber}"
+            android:textAllCaps="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/legislator_detail_margin"
+            android:layout_marginStart="@dimen/legislator_detail_margin"
+            android:textSize="@dimen/legislator_detail_normal_size"
+            android:text="@{legislator.formatPartyAndState(context)}"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/legislator_detail_margin"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/ldf_view_govtrack_report"
+            android:onClick="@{() -> presenter.govtrackTapped()}"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/legislator_detail_margin"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/ic_social_icon"
+                android:layout_margin="@dimen/legislator_detail_margin"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_detail_twitter"
+                android:visibility="@{legislator.isTwitterVisible(legislator.twitterId) ? View.VISIBLE : View.GONE}"
+                android:onClick="@{() -> presenter.twitterTapped()}"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/ic_social_icon"
+                android:layout_margin="@dimen/legislator_detail_margin"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_detail_facebook"
+                android:visibility="@{legislator.isFacebookVisible(legislator.facebookId) ? View.VISIBLE : View.GONE}"
+                android:onClick="@{() -> presenter.facebookTapped()}"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/ic_social_icon"
+                android:layout_margin="@dimen/legislator_detail_margin"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_detail_youtube"
+                android:visibility="@{legislator.isYouTubeVisible(legislator.youtubeId) ? View.VISIBLE : View.GONE}"
+                android:onClick="@{() -> presenter.youTubeTapped()}"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/ic_social_icon"
+                android:layout_margin="@dimen/legislator_detail_margin"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_detail_website"
+                android:visibility="@{legislator.isWebsiteVisible(legislator.website) ? View.VISIBLE : View.GONE}"
+                android:onClick="@{() -> presenter.websiteTapped()}"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

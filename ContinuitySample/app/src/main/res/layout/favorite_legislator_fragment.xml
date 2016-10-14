@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="presenter"
+            type="com.bottlerocketstudios.continuitysample.legislator.presenter.FavoriteLegislatorListPresenter"/>
+        <variable
+            name="favoriteLegislatorViewModel"
+            type="com.bottlerocketstudios.continuitysample.legislator.viewmodel.FavoriteLegislatorViewModel"/>
+    </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/flf_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:clipToPadding="false"/>
+        <TextView
+            android:id="@+id/flf_empty_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{favoriteLegislatorViewModel.emptyMessageVisible ? View.VISIBLE : View.GONE}"
+            android:text="@string/flf_empty_message"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/flf_fab_search"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:onClick="@{() -> presenter.searchFabTapped()}"
+            android:src="@drawable/ic_search_white_24dp"/>
+    </FrameLayout>
+</layout>
