@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="presenter"
+            type="com.bottlerocketstudios.continuitysample.legislator.presenter.LegislatorSearchResultPresenter"/>
+        <variable
+            name="legislatorSearchViewModel"
+            type="com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorSearchResultViewModel"/>
+    </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lsrf_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"/>
+        <TextView
+            android:id="@+id/lsrf_empty_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{legislatorSearchViewModel.emptyMessageVisible ? View.VISIBLE : View.GONE}"
+            android:text="@string/lsrf_empty_message"/>
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/lsrf_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{legislatorSearchViewModel.searchInProgress ? View.VISIBLE : View.GONE}"/>
+    </FrameLayout>
+</layout>
