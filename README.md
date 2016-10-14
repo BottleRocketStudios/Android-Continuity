@@ -63,7 +63,7 @@ Fragments are a very slightly different case. You should wait until the result o
             MyPresenter myPresenter = continuityRepository.with(this, MyPresenter.class).build();
         }
 		
-**NOTE:** This will not be the same instance that was provided to the Activity in the example above even if the Fragment is attached to that Activity. If you want them to receive the same Presenter(not recommended) pass the Activity instance as the Anchor for both calls. You shouldn't share Presenters or really any other object this way.
+**NOTE:** This will not be the same instance that was provided to the Activity in the example above even if the Fragment is attached to that Activity. That is working as intended. There is a way that both the Fragment and Activity could share the same Presenter, but you should not do it and I'm not going to tell you how. 
 
 #### Cleanup 
 **IMPORTANT:** In your BaseActivity and BaseFragment or any one-off Fragments/DialogFragments it is a best practice to cleanup your anchor manually in the onDestroy method. 
@@ -80,7 +80,7 @@ It is very easy to accidentally leak the UI by e.g. having the UI implement a Li
 
         Singleton-ish(DI, ServiceLocator, Whatever) -> ContinuityRepository -> Presenter -> UI 
         
-By calling ContinuityRepository.onDestroy(anchor) the ContinuityRepository->Presenter link will be broken **after** the lifetime has expired. It is still recommended that your presenter implements ContinuousObject so that when your UI has been destroyed it can remove any references to the dead UI element. This also expedites GC of the UI among countless other benefits.
+By calling ContinuityRepository.onDestroy(anchor) the ContinuityRepository->Presenter link will be broken **after** the lifetime has expired unless the Activity isFinishing() or the Fragment isRemoving() where it will be instant. It is still recommended that your presenter implements ContinuousObject so that when your UI has been destroyed it can remove any references pointing back to the dead UI element. This also expedites GC of the UI among countless other benefits.
 	
 #### Changing Defaults
 If the default timeouts are not acceptable, you can specify your own in the ContinuityRepository constructor. You can even have many ContinuousRepository instances with different timings, but that may become hard to manage. You can also override the lifetime of a single ContinuousObject by specifying a different lifetime in the builder. 
@@ -98,12 +98,12 @@ If the default timeouts are not acceptable, you can specify your own in the Cont
                     return new ExampleTestClass(testString);
                 }
             })               //Use an anonymous ContinuityFactory if the constructor requires arguments.
-            .tag("example1") //Further differentiate the ContainerId with a custom tag like an article Id.
+            .tag("example1") //Further differentiate the ContinuousId with a custom tag like an article Id.
             .build();        //Either create or retrieve the ContinuousObject instance.
 
 Changing the lifetime can allow for a longer or shorter than default time between the destruction and recreation of an Anchor. The highest lifetime specified by any builder for a ContinuousObject **instance** will take precedent until that ContinuousObject instance is discarded. Handle with care.
 
-In most cases the ContinuityFactory should be avoided in favor of just calling accessor methods on the ContinuousObject instance you are creating. That ensures that if a cached object were returned from the repository, it has the correct information. If the parameters passed to the constructor will never change and really need to be final in the ContinuousObject, then you have a good case to use it.
+In most cases the ContinuityFactory should be avoided in favor of just calling accessor methods on the ContinuousObject instance you are creating after it is created. That ensures that if a cached object were returned from the repository, it has the correct information. If the parameters passed to the constructor will never change and really need to be final in the ContinuousObject, then you have a good case to use it.
 
 The tag can be used to be sure you get a fresh presenter if the same Android Task and Fragment/Activity are displaying a different item in ViewPager for example. 
 
@@ -124,7 +124,10 @@ Any other optional attributes you used to distinguish the ContinuousId in the or
 The last example allows your to have similar functionality to calling continuousRepository.onDestroy(this) except that you are explicitly removing a single specific ContinuousObject immediately and also allowing it to perform any work it needs to do in onContinuityAnchorDestroyed. Other ContinuousObjects associated with the same anchor will not be notified and will be retained in the normal way. This should be pretty rare, but the tool is there if you need it.
 
 #### Sample Application
-Look in this repository for a sample application that demonstrates the use of this library along with the MVVMP design pattern enabled by the release of Android DataBinding. 
+Look in this repository for a sample application that demonstrates the use of this library along with the MVVMP design pattern enabled by the release of Android DataBinding. You will need to visit the Sunlight Foundation to get an API key then add this to a local.properties file replacing the made up value with your actual API key. https://sunlightlabs.github.io/congress/
+	
+		//In ContinuitySample/local.properties add this line
+		sunlightApiKey="abcd1234"
 
 ### Gradle
 Add the jcenter repository and include the library in your project with the compile directive in your dependencies section of your build.gradle.
@@ -138,7 +141,7 @@ Add the jcenter repository and include the library in your project with the comp
 
         dependencies {
             ...
-            compile 'com.bottlerocketstudios:continuity:1.0.1'
+            compile 'com.bottlerocketstudios:continuity:1.1.2'
         }
 
 In rare cases where you need to pull a snapshot build to help troubleshoot the develop branch, snapshots are hosted by JFrog. You should not ship a release using the snapshot library as the actual binary referenced by snapshot is going to change with every build of the develop branch. In the best case you will have irreproducible builds. In the worst case, human extinction. In some more likely middle case, you will have buggy or experimental code in your released app.
@@ -153,7 +156,7 @@ In rare cases where you need to pull a snapshot build to help troubleshoot the d
          
          dependencies {
             ...
-            compile 'com.bottlerocketstudios:continuity:1.0.2-SNAPSHOT'
+            compile 'com.bottlerocketstudios:continuity:1.1.3-SNAPSHOT'
          }
 
 ### Build
