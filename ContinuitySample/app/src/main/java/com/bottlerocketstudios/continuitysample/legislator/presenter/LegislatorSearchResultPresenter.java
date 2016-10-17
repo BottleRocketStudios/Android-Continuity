@@ -105,7 +105,7 @@ public class LegislatorSearchResultPresenter implements ContinuousObject {
         }
     }
 
-    public void startSearching(SearchMode searchMode, String query) {
+    public void onResume(SearchMode searchMode, String query) {
         mSearchMode = searchMode;
         mQuery = query;
         if (!mLegislatorSearchResultViewModel.isSearchStarted()) {

@@ -110,7 +110,7 @@ public class LegislatorSearchResultFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mLegislatorSearchResultPresenter.startSearching((LegislatorSearchResultPresenter.SearchMode) getArguments().getSerializable(ARG_SEARCH_MODE), getArguments().getString(ARG_SEARCH_QUERY, null));
+        mLegislatorSearchResultPresenter.onResume((LegislatorSearchResultPresenter.SearchMode) getArguments().getSerializable(ARG_SEARCH_MODE), getArguments().getString(ARG_SEARCH_QUERY, null));
     }
 
     private LegislatorSearchResultPresenter.Listener mPresenterListener = new LegislatorSearchResultPresenter.Listener() {
