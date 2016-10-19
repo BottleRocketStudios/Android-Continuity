@@ -2,12 +2,13 @@ package com.bottlerocketstudios.continuitysample.legislator.presenter;
 
 import android.databinding.Observable;
 
-import com.android.databinding.library.baseAdapters.BR;
 import com.bottlerocketstudios.continuity.ContinuousObject;
+import com.bottlerocketstudios.continuitysample.BR;
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorSearchInputViewModel;
 import com.bottlerocketstudios.groundcontrol.convenience.GroundControl;
 
 import java.util.regex.Pattern;
+
 
 /**
  * Created on 10/6/16.
@@ -24,7 +25,7 @@ public class LegislatorSearchInputPresenter implements ContinuousObject {
         mViewModel.addOnPropertyChangedCallback(mViewModelCallback);
     }
 
-    public void bindListener(LegislatorSearchInputPresenter.Listener listener) {
+    public void bindListener(Listener listener) {
         mListener = listener;
         mListener.bindViewModel(mViewModel);
     }
@@ -43,13 +44,10 @@ public class LegislatorSearchInputPresenter implements ContinuousObject {
         @Override
         public void onPropertyChanged(Observable observable, int fieldId) {
             LegislatorSearchInputViewModel viewModel = (LegislatorSearchInputViewModel) observable;
-            switch (fieldId) {
-                case BR.legislatorName:
-                    if (!viewModel.isNameValid()) validateName(viewModel.getLegislatorName());
-                    break;
-                case BR.zipCode:
-                    if (!viewModel.isZipValid()) validateZip(viewModel.getZipCode());
-                    break;
+            if (fieldId == BR.legislatorName) {
+                if (!viewModel.isNameValid()) validateName(viewModel.getLegislatorName());
+            } else if (fieldId == BR.zipCode) {
+                if (!viewModel.isZipValid()) validateZip(viewModel.getZipCode());
             }
         }
     };
