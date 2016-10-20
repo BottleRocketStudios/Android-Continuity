@@ -182,7 +182,7 @@ public class LegislatorSearchResultFragment extends BaseFragment {
                         }
                     })
                     .build()
-                    .show(getChildFragmentManager(), DIALOG_TAG_ERROR);
+                    .postShow(getChildFragmentManager(), DIALOG_TAG_ERROR);
         }
 
         @Override
@@ -199,7 +199,7 @@ public class LegislatorSearchResultFragment extends BaseFragment {
                         }
                     })
                     .build()
-                    .show(getChildFragmentManager(), DIALOG_TAG_ERROR);
+                    .postShow(getChildFragmentManager(), DIALOG_TAG_ERROR);
         }
 
         @Override
