@@ -16,7 +16,8 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 /**
- * Created on 9/16/16.
+ * A sample implementation to handle the required Activity based plumbing between a Presenter,
+ * Google Play Services, and Location Settings.
  */
 public class BaseLocationActivity extends BaseActivity implements LocationActivity {
 

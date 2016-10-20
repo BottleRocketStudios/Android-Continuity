@@ -28,15 +28,16 @@ import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorS
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorViewModel;
 
 /**
- * Created on 9/13/16.
+ * A more complex fragment because it has to mediate interactions with permissions/Google Play and notify
+ * users of so many errors and steps. So many. Just so, so many.
  */
 public class LegislatorSearchResultFragment extends BaseFragment {
 
     private static final int REQUEST_CODE_PERMISSION = 1;
     private static final String ARG_SEARCH_QUERY = "searchQuery";
-    private static final String ARG_SEARCH_MODE = "zipCode";
-    private static final String SAVED_LAYOUT_MANAGER = "layoutManager";
+    private static final String ARG_SEARCH_MODE = "searchMode";
 
+    //So many things can go wrong with a location.
     private static final String DIALOG_TAG_ERROR = "errorDialog";
     private static final int DIALOG_ID_PERMANENT_PERMISSION_FAILURE = 1;
     private static final int DIALOG_ID_TEMPORARY_PERMISSION_FAILURE = 2;
@@ -80,10 +81,12 @@ public class LegislatorSearchResultFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        LocationActivity locationActivity = activityCastOrThrow(context, LocationActivity.class);
-
         //Create or retrieve the presenter
         mLegislatorSearchResultPresenter = getPresenterRepository().with(this, LegislatorSearchResultPresenter.class).build();
+
+        //This has to be hosted by a special LocationActivity for Google Play Services plumbing so
+        //hand that to the presenter.
+        LocationActivity locationActivity = activityCastOrThrow(context, LocationActivity.class);
         mLegislatorSearchResultPresenter.setLocationActivity(locationActivity);
 
         mFragmentListener = activityCastOrThrow(context, Listener.class);

@@ -9,7 +9,7 @@ import com.bottlerocketstudios.continuitysample.core.util.LogIt;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created on 7/20/16.
+ * An example presenter for a DialogFragment.
  */
 public class SampleDialogPresenter implements ContinuousObject {
     private static final String TAG = SampleDialogPresenter.class.getSimpleName();

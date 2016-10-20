@@ -10,7 +10,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created on 9/14/16.
+ * Base request for Legislator endpoint.
  */
 public abstract class GetLegislatorsBase extends SunlightRequest {
 

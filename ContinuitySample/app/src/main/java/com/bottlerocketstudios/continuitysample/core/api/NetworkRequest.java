@@ -7,7 +7,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 /**
- * Created on 9/14/16.
+ * Generic NetworkRequest using OkHttpClient
  */
 public interface NetworkRequest {
     HttpUrl getHttpUrl();

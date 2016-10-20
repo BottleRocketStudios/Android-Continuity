@@ -3,7 +3,7 @@ package com.bottlerocketstudios.continuitysample.legislator.api;
 import okhttp3.HttpUrl;
 
 /**
- * Created on 9/14/16.
+ * Get a collection of legislators for a zip code.
  */
 public class GetLegislatorsByZip extends GetLegislatorsLocateBase {
     private final String mZip;

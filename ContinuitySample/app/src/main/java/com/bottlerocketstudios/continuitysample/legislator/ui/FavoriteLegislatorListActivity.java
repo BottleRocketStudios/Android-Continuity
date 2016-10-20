@@ -5,9 +5,6 @@ import android.os.Bundle;
 import com.bottlerocketstudios.continuitysample.R;
 import com.bottlerocketstudios.continuitysample.core.ui.BaseActivity;
 
-/**
- * Created on 9/13/16.
- */
 public class FavoriteLegislatorListActivity extends BaseActivity {
 
     private static final String FRAG_FAVORITE_LEGISLATORS = "representativeList";

@@ -1,12 +1,10 @@
 package com.bottlerocketstudios.continuitysample.core.injection;
 
 import android.content.Context;
-import android.util.LruCache;
 
 import com.bottlerocketstudios.continuitysample.core.util.LogIt;
 import com.bottlerocketstudios.continuitysample.legislator.domain.LegislatorRepository;
 import com.bottlerocketstudios.continuitysample.legislator.domain.SharedPrefLegislatorStorage;
-import com.bottlerocketstudios.continuitysample.legislator.model.Legislator;
 
 import java.io.File;
 
@@ -14,7 +12,7 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 /**
- * Created on 9/14/16.
+ * Initialize services that require a Context.
  */
 public class ContextServiceInitializer implements Injectable<Context> {
     private static final String TAG = ContextServiceInitializer.class.getSimpleName();

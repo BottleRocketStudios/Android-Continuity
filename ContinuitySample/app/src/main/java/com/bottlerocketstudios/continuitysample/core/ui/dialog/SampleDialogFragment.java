@@ -20,7 +20,8 @@ import com.bottlerocketstudios.continuitysample.core.presenter.SampleDialogPrese
 import com.bottlerocketstudios.continuitysample.databinding.SampleDialogFragmentBinding;
 
 /**
- * Created on 6/8/16.
+ * Makes a DialogFragment using the supplied DialogConfiguration. Use {@link Builder} to create new
+ * dialogs.
  */
 public class SampleDialogFragment extends DialogFragment {
     private static final String TAG = SampleDialogFragment.class.getSimpleName();
@@ -84,9 +85,12 @@ public class SampleDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //Grab the presenter using the dialog ID as a tag to differentiate this dialog from others.
         mSampleDialogPresenter = mPresenterRepository.with(this, SampleDialogPresenter.class)
                 .tag(String.valueOf(mDialogConfiguration.getDialogId()))
                 .build();
+
         mSampleDialogPresenter.setDialogConfiguration(mDialogConfiguration);
         mSampleDialogPresenter.bindListener(mDialogPresenterListener);
         if (mPendingOnClickListener != null) {

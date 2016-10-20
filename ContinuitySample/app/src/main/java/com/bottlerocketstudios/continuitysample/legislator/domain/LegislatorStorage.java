@@ -3,7 +3,7 @@ package com.bottlerocketstudios.continuitysample.legislator.domain;
 import java.util.Set;
 
 /**
- * Created on 9/14/16.
+ * Storage interface for LegislatorRepository
  */
 public interface LegislatorStorage {
     void saveFavoriteLegislatorIdSet(Set<String> favoriteLegislators);

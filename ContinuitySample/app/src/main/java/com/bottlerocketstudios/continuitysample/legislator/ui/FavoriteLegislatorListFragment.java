@@ -23,9 +23,6 @@ import com.bottlerocketstudios.continuitysample.legislator.presenter.FavoriteLeg
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.FavoriteLegislatorViewModel;
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorViewModel;
 
-/**
- * Created on 9/13/16.
- */
 public class FavoriteLegislatorListFragment extends BaseFragment {
 
     private static final int DIALOG_ID_ERROR = 200;
@@ -48,11 +45,13 @@ public class FavoriteLegislatorListFragment extends BaseFragment {
         mFavoriteLegislatorPresenter = getPresenterRepository().with(this, FavoriteLegislatorListPresenter.class).build();
         mFavoriteLegislatorFragmentBinding.setPresenter(mFavoriteLegislatorPresenter);
 
+        //Setup recycler
         mFavoriteLegislatorFragmentBinding.flfRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mFavoriteLegislatorRecyclerAdapter = new FavoriteLegislatorRecyclerAdapter();
         mFavoriteLegislatorRecyclerAdapter.setFavoriteLegislatorListPresenter(mFavoriteLegislatorPresenter);
         mFavoriteLegislatorFragmentBinding.flfRecyclerView.setAdapter(mFavoriteLegislatorRecyclerAdapter);
 
+        //Bind this to the presenter.
         mFavoriteLegislatorPresenter.bindListener(mListener);
 
         return mFavoriteLegislatorFragmentBinding.getRoot();

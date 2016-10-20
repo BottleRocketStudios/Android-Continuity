@@ -5,7 +5,8 @@ import android.util.Log;
 import com.bottlerocketstudios.continuitysample.BuildConfig;
 
 /**
- * Created on 9/14/16.
+ * Log wrapper that handles being used in a JUNIT test where android.util.log is absent and can be
+ * muted for logging levels below a threshold.
  */
 public class LogIt {
 

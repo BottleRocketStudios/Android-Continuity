@@ -14,10 +14,6 @@ import com.bottlerocketstudios.continuitysample.databinding.LegislatorSearchInpu
 import com.bottlerocketstudios.continuitysample.legislator.presenter.LegislatorSearchInputPresenter;
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorSearchInputViewModel;
 
-/**
- * Created on 10/6/16.
- */
-
 public class LegislatorSearchInputFragment extends BaseFragment {
 
     private Listener mFragmentListener;
@@ -69,6 +65,9 @@ public class LegislatorSearchInputFragment extends BaseFragment {
         }
     };
 
+    /**
+     * Plumbing back to host activity in case we want dual pane in the future.
+     */
     public interface Listener {
         void launchSearchByName(String name);
         void launchSearchByZip(String zip);

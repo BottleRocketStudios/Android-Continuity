@@ -3,7 +3,17 @@ package com.bottlerocketstudios.continuitysample.core.util;
 import java.util.List;
 
 /**
- * Created on 9/14/16.
+ * Process a list using the supplied LrTransform. The selectiveReplace method will visit each node
+ * on two lists of different types.
+ * <ol>
+ *   <li>While the lists match, skip entries in the destination</li>
+ *   <li>If a change is made for a matching entry, replace it.</li>
+ *   <li>If a mismatch is found, replace the item in the destination.</li>
+ *   <li>If items in the source outnumber the items in the destination, append to destination</li>
+ *   <li>If items in the destination outnumber items in the source, truncate the destination.</li>
+ * </ol>
+ * This runs in a single pass to be O(n). If an item is inserted in the source, it will cause recreation
+ * of all items following it in the destination. Recreation should be inexpensive (MapStruct).
  */
 public class ListReplacer {
 

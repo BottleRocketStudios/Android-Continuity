@@ -6,9 +6,8 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created on 10/3/16.
+ * Implementation of ImageViewBindingAdapter that will use Picasso to fulfill requests.
  */
-
 public class PicassoImageViewBindingAdapter implements ImageViewBindingAdapter {
     @Override
     public void loadImageUrl(ImageView imageView, String imageUrl) {

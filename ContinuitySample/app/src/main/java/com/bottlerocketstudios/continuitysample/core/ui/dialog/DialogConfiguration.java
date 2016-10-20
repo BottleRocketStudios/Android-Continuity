@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+/**
+ * Configuration object for a SimpleDialogFragment
+ */
 public class DialogConfiguration implements Parcelable {
     private final int mDialogId;
     private final int mIconDrawableResourceId;

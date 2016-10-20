@@ -1,6 +1,5 @@
 package com.bottlerocketstudios.continuitysample.legislator.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -16,14 +15,9 @@ import com.bottlerocketstudios.continuitysample.databinding.LegislatorDetailFrag
 import com.bottlerocketstudios.continuitysample.legislator.presenter.LegislatorDetailPresenter;
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorViewModel;
 
-/**
- * Created on 10/6/16.
- */
-
 public class LegislatorDetailFragment extends BaseFragment {
 
     private static final String ARG_LEGISLATOR = "legislator";
-    private Listener mFragmentListener;
 
     LegislatorDetailPresenter mPresenter;
     LegislatorDetailFragmentBinding mBinding;
@@ -38,9 +32,9 @@ public class LegislatorDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mFragmentListener = activityCastOrThrow(context, Listener.class);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //This time the ViewModel is supplied upon creation of the fragment by the Activity.
         mLegislatorViewModel = getArguments().getParcelable(ARG_LEGISLATOR);
     }
 
@@ -52,6 +46,7 @@ public class LegislatorDetailFragment extends BaseFragment {
         mPresenter = getPresenterRepository().with(this, LegislatorDetailPresenter.class).tag(mLegislatorViewModel.getBioguideId()).build();
         mPresenter.bindListener(mPresenterListener);
         mPresenter.setViewModel(mLegislatorViewModel);
+
         mBinding.setPresenter(mPresenter);
         mBinding.setLegislator(mLegislatorViewModel);
 
@@ -66,7 +61,4 @@ public class LegislatorDetailFragment extends BaseFragment {
         }
     };
 
-    public interface Listener {
-        void finish();
-    }
 }

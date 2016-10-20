@@ -7,7 +7,7 @@ import com.bottlerocketstudios.continuitysample.legislator.model.Legislator;
 import java.util.List;
 
 /**
- * Created on 9/14/16.
+ * Asynchronously execute a fetch of legislators for a zip code.
  */
 public class GetLegislatorsByZipAgent extends BaseAgent<List<Legislator>> {
 

@@ -7,7 +7,7 @@ import com.bottlerocketstudios.continuitysample.legislator.model.Legislator;
 import java.util.List;
 
 /**
- * Created on 9/14/16.
+ * Asynchronously execute a fetch of legislators with a supplied string in their name.
  */
 public class GetLegislatorsByNameAgent extends BaseAgent<List<Legislator>> {
 

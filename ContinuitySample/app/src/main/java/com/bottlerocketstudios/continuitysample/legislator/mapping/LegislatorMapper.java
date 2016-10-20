@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 /**
- * Created on 9/14/16.
+ * Map Legislator related models to view models.
  */
 @Mapper
 public interface LegislatorMapper {

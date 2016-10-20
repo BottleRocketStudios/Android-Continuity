@@ -1,7 +1,7 @@
 package com.bottlerocketstudios.continuitysample.core.api;
 
 /**
- * Created on 9/14/16.
+ * NetworkResponse which is returned by a NetworkExecutor.
  */
 public class NetworkResponse<T> {
     private final T mValue;

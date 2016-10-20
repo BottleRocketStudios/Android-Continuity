@@ -13,7 +13,7 @@ import com.bottlerocketstudios.continuitysample.core.injection.ServiceInjector;
 import com.bottlerocketstudios.continuitysample.databinding.BaseActivityBinding;
 
 /**
- * Created on 9/13/16.
+ * All Activities should extend this class.
  */
 public class BaseActivity extends AppCompatActivity {
 
@@ -49,6 +49,9 @@ public class BaseActivity extends AppCompatActivity {
         mToolbar = baseActivityBinding.baseToolbar;
     }
 
+    /**
+     * If a custom binding is used for the Activity layout, Override this method to return the Toolbar.
+     */
     protected Toolbar getToolbar() {
         return mToolbar;
     }
@@ -60,6 +63,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //Let the repository know that this Activity is being destroyed so that Presenters associated with it are notified.
         mPresenterRepository.onDestroy(this);
     }
 }

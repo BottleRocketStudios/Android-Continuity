@@ -1,9 +1,8 @@
 package com.bottlerocketstudios.continuitysample.core.databinding;
 
 /**
- * Created on 10/3/16.
+ * DataBindingComponent that will provide an ImageViewDataBindingAdapter that uses Picasso.
  */
-
 public class PicassoDataBindingComponent implements android.databinding.DataBindingComponent {
     @Override
     public ImageViewBindingAdapter getImageViewBindingAdapter() {

@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import java.util.Set;
 
 /**
- * Created on 9/14/16.
+ * LegislatorStorage implementation backed by SharedPreferences.
  */
 public class SharedPrefLegislatorStorage implements LegislatorStorage {
 

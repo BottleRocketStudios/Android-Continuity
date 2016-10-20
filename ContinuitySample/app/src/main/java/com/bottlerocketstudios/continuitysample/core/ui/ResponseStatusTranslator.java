@@ -6,9 +6,8 @@ import com.bottlerocketstudios.continuitysample.R;
 import com.bottlerocketstudios.continuitysample.core.model.ResponseStatus;
 
 /**
- * Created on 10/13/16.
+ * User facing translation of ResponseStatus to a string resource.
  */
-
 public class ResponseStatusTranslator {
 
     public static String getErrorString(Context context, ResponseStatus responseStatus) {

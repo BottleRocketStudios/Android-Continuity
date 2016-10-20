@@ -3,7 +3,7 @@ package com.bottlerocketstudios.continuitysample.core.model;
 import com.bottlerocketstudios.continuitysample.core.api.NetworkResponseStatus;
 
 /**
- * Created on 9/14/16.
+ * Status of response from a UseCase (Agent)
  */
 public enum ResponseStatus {
     NETWORK_ERROR,
