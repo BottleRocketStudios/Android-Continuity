@@ -8,9 +8,9 @@ import android.widget.ImageView;
  * Adapter that will handle imageUrl and imageUrl, error attribute combinations for ImageViews.
  */
 public interface ImageViewBindingAdapter {
-    @BindingAdapter("bind:imageUrl")
+    @BindingAdapter("imageUrl")
     void loadImageUrl(ImageView imageView, String imageUrl);
 
-    @BindingAdapter({"bind:imageUrl", "bind:error"})
+    @BindingAdapter({"imageUrl", "error"})
     void loadImageUrl(ImageView imageView, String imageUrl, Drawable error);
 }
