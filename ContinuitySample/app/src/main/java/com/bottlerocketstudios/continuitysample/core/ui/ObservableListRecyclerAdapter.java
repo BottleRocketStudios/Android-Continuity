@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 /**
- * Created on 7/8/16.
+ * Generic RecyclerAdapter that will automatically observe an ObservableList and notify the Recycler
+ * of the appropriate updates as they map from ObservableList to RecyclerAdapter calls. This is ran
+ * through a WeakObservableListWatcher because there isn't a clear way (AFAIK) to know when this
+ * Adapter is no longer in use. The onDetachedFromRecyclerView callback is only on explicit detach.
  */
 public abstract class ObservableListRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 

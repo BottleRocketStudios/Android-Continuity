@@ -27,6 +27,9 @@ public class BaseFragment extends Fragment {
         return mPresenterRepository;
     }
 
+    /**
+     * Convenience method to wrap casting an Activity to a listener interface type onAttach.
+     */
     public <T> T activityCastOrThrow(Context context, Class<T> castType) {
         if (castType.isInstance(context)) {
             return castType.cast(context);
@@ -37,6 +40,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //Let the repository know that this Fragment is being destroyed so that Presenters associated with it are notified.
         mPresenterRepository.onDestroy(this);
     }
 }

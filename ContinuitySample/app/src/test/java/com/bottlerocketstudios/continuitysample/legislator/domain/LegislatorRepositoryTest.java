@@ -108,7 +108,7 @@ public class LegislatorRepositoryTest {
     public void testAgent() {
         final ResultContainer<ResponseContainer<List<Legislator>>> testResultContainer = new ResultContainer<>();
         GroundControl.agent(new GetLegislatorsByZipAgent(mLegislatorRepository, "75001"))
-                .bgSerialCallback(new FunctionalAgentListener<ResponseContainer<List<Legislator>>, Void>() {
+                .bgSerialCallback(new FunctionalAgentListener<ResponseContainer<List<Legislator>>, Float>() {
                     @Override
                     public void onCompletion(String agentIdentifier, ResponseContainer<List<Legislator>> result) {
                         testResultContainer.setResult(result);

@@ -5,7 +5,7 @@ import com.bottlerocketstudios.continuitysample.legislator.domain.LegislatorRepo
 import com.bottlerocketstudios.continuitysample.legislator.model.Legislator;
 
 /**
- * Created on 9/14/16.
+ * Asynchronously execute a fetch of a specific legislator identified by a bioguide id.
  */
 public class SetFavoriteLegislatorByBioguideId extends BaseAgent<Legislator> {
 

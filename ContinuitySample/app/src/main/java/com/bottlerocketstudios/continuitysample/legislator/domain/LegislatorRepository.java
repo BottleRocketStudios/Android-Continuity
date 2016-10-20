@@ -28,7 +28,8 @@ import java.util.Set;
 import okhttp3.OkHttpClient;
 
 /**
- * Created on 9/13/16.
+ * Centralized repository for Legislator caching, retrieval and storage of favorites. All calls are
+ * potentially blocking.
  */
 public class LegislatorRepository {
 

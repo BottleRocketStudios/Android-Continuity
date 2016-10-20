@@ -9,7 +9,8 @@ import com.bottlerocketstudios.continuitysample.core.util.LogIt;
 import java.lang.ref.WeakReference;
 
 /**
- * Created on 7/8/16.
+ * This object proxies calls between an ObservableList and a RecyclerView.Adapter to prevent a leak and when
+ * the WeakReference to the RecyclerView.Adapter breaks, unsubscribe from the ObservableList.
  */
 public class WeakObservableListWatcher<T> extends ObservableList.OnListChangedCallback<ObservableList<T>> {
 

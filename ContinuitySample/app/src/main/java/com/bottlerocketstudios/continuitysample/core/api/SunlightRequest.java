@@ -6,7 +6,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 
 /**
- * Created on 9/14/16.
+ * Base Request for the SunlightFoundation API
  */
 public abstract class SunlightRequest implements NetworkRequest {
 

@@ -79,7 +79,7 @@
                 android:layout_margin="@dimen/legislator_detail_margin"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_detail_twitter"
-                android:visibility="@{legislator.isTwitterVisible(legislator.twitterId) ? View.VISIBLE : View.GONE}"
+                android:visibility="@{legislator.isTwitterVisible() ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> presenter.twitterTapped()}"/>
             <ImageView
                 android:layout_width="0dp"
@@ -88,7 +88,7 @@
                 android:layout_margin="@dimen/legislator_detail_margin"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_detail_facebook"
-                android:visibility="@{legislator.isFacebookVisible(legislator.facebookId) ? View.VISIBLE : View.GONE}"
+                android:visibility="@{legislator.isFacebookVisible() ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> presenter.facebookTapped()}"/>
             <ImageView
                 android:layout_width="0dp"
@@ -97,7 +97,7 @@
                 android:layout_margin="@dimen/legislator_detail_margin"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_detail_youtube"
-                android:visibility="@{legislator.isYouTubeVisible(legislator.youtubeId) ? View.VISIBLE : View.GONE}"
+                android:visibility="@{legislator.isYouTubeVisible() ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> presenter.youTubeTapped()}"/>
             <ImageView
                 android:layout_width="0dp"
@@ -106,7 +106,7 @@
                 android:layout_margin="@dimen/legislator_detail_margin"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_detail_website"
-                android:visibility="@{legislator.isWebsiteVisible(legislator.website) ? View.VISIBLE : View.GONE}"
+                android:visibility="@{legislator.isWebsiteVisible() ? View.VISIBLE : View.GONE}"
                 android:onClick="@{() -> presenter.websiteTapped()}"/>
         </LinearLayout>
     </LinearLayout>

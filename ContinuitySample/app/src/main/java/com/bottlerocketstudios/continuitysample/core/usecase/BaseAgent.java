@@ -4,9 +4,9 @@ import com.bottlerocketstudios.continuitysample.core.model.ResponseContainer;
 import com.bottlerocketstudios.groundcontrol.agent.AbstractAgent;
 
 /**
- * Created on 9/14/16.
+ * For this application our Agents will not provide advanced progress indication.
  */
-public abstract class BaseAgent<T> extends AbstractAgent<ResponseContainer<T>, Void> {
+public abstract class BaseAgent<T> extends AbstractAgent<ResponseContainer<T>, Float> {
 
     private String mUniqueIdentifier;
 

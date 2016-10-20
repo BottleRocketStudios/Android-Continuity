@@ -3,9 +3,8 @@ package com.bottlerocketstudios.continuitysample.core.util;
 import java.util.Locale;
 
 /**
- * Created on 10/12/16.
+ * Use the various social network identifiers to generate external links for those services.
  */
-
 public class SocialLinkFormatter {
     private static final String TWITTER_URL_FORMAT = "https://twitter.com/%1$s";
     private static final String YOUTUBE_URL_FORMAT = "https://www.youtube.com/user/%1$s";

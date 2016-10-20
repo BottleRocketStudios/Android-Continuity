@@ -6,7 +6,7 @@ import android.databinding.Bindable;
 import com.bottlerocketstudios.continuitysample.BR;
 
 /**
- * Created on 9/14/16.
+ * Meta UI state for a favorite legislator presenter.
  */
 public class FavoriteLegislatorViewModel extends BaseObservable {
     private boolean mEmptyMessageVisible;

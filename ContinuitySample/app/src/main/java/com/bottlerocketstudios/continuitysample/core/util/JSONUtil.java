@@ -4,10 +4,6 @@ import android.text.TextUtils;
 
 import org.json.JSONObject;
 
-/**
- * Created on 10/5/16.
- */
-
 public class JSONUtil {
 
     private static final String NULL_LITERAL = "null";

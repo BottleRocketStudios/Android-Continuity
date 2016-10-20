@@ -8,9 +8,8 @@ import com.bottlerocketstudios.continuitysample.BR;
 import com.bottlerocketstudios.continuitysample.R;
 
 /**
- * Created on 10/6/16.
+ * Meta UI state for a legislator search input presenter.
  */
-
 public class LegislatorSearchInputViewModel extends BaseObservable {
 
     private String mLegislatorName = "";

@@ -5,7 +5,7 @@ import android.location.Location;
 import okhttp3.HttpUrl;
 
 /**
- * Created on 9/14/16.
+ * Get a collection of legislators for the specified location.
  */
 public class GetLegislatorsByCoordinates extends GetLegislatorsLocateBase {
 

@@ -3,7 +3,7 @@ package com.bottlerocketstudios.continuitysample.legislator.api;
 import okhttp3.HttpUrl;
 
 /**
- * Created on 9/14/16.
+ * Get a collection of legislators with a name that contains the search string.
  */
 public class GetLegislatorsByName extends GetLegislatorsBase {
     private final String mName;

@@ -3,7 +3,7 @@ package com.bottlerocketstudios.continuitysample.legislator.api;
 import okhttp3.HttpUrl;
 
 /**
- * Created on 9/14/16.
+ * Get a specific legislator identified by bioguide_id
  */
 public class GetLegislatorsByBioguideId extends GetLegislatorsBase {
 

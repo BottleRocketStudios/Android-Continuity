@@ -5,9 +5,8 @@ import java.util.Locale;
 import okhttp3.HttpUrl;
 
 /**
- * Created on 10/3/16.
+ * Base request for the Govtrack API.
  */
-
 public abstract class GovtrackRequest implements NetworkRequest {
     public static final HttpUrl BASE_URL = HttpUrl.parse("https://www.govtrack.us/api/v2");
     public static final HttpUrl BASE_IMAGE_URL = HttpUrl.parse("https://www.govtrack.us/data/photos");

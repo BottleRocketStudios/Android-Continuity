@@ -9,9 +9,6 @@ import com.bottlerocketstudios.continuitysample.databinding.LegislatorSearchItem
 import com.bottlerocketstudios.continuitysample.legislator.presenter.LegislatorSearchResultPresenter;
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorViewModel;
 
-/**
- * Created on 7/7/16.
- */
 public class LegislatorSearchRecyclerAdapter extends ObservableListRecyclerAdapter<LegislatorViewModel, LegislatorSearchItemViewHolder> {
     private static final String TAG = LegislatorSearchRecyclerAdapter.class.getSimpleName();
 

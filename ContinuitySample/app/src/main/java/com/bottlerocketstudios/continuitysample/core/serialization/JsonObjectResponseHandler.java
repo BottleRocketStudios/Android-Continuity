@@ -12,7 +12,7 @@ import java.io.IOException;
 import okhttp3.Response;
 
 /**
- * Created on 9/14/16.
+ * ResponseHandler for JSONObject. You could use GSON or something.
  */
 public abstract class JsonObjectResponseHandler<T> implements ResponseHandler<T> {
     private static final String TAG = JsonObjectResponseHandler.class.getSimpleName();

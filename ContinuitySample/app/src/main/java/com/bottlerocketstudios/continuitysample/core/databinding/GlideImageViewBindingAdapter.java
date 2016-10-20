@@ -6,9 +6,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 /**
- * Created on 10/3/16.
+ * Implementation of ImageViewBindingAdapter that will use Glide to fulfill requests.
  */
-
 public class GlideImageViewBindingAdapter implements ImageViewBindingAdapter {
 
     @Override

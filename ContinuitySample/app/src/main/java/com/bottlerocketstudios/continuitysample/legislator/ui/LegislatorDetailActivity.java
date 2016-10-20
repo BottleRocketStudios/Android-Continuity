@@ -9,11 +9,7 @@ import com.bottlerocketstudios.continuitysample.R;
 import com.bottlerocketstudios.continuitysample.core.ui.BaseActivity;
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorViewModel;
 
-/**
- * Created on 10/11/16.
- */
-
-public class LegislatorDetailActivity extends BaseActivity implements LegislatorDetailFragment.Listener {
+public class LegislatorDetailActivity extends BaseActivity {
 
     public static final String EXTRA_LEGISLATOR = "legislator";
     private static final String FRAG_LEGISLATOR_DETAIL = "legislatorDetailFrag";

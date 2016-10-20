@@ -7,7 +7,7 @@ import com.bottlerocketstudios.continuitysample.legislator.presenter.LegislatorS
 import com.bottlerocketstudios.continuitysample.legislator.viewmodel.LegislatorViewModel;
 
 /**
- * Created on 7/7/16.
+ * Straightforward specific layout binding ViewHolder.
  */
 public class LegislatorSearchItemViewHolder extends RecyclerView.ViewHolder {
     private final LegislatorSearchItemBinding mLegislatorItemBinding;

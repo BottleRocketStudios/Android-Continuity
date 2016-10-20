@@ -4,7 +4,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 
 /**
- * Created on 9/16/16.
+ * Methods that are required to communicate with an Activity that is trying to connect to Google
+ * Play Services for a Location update.
  */
 public interface LocationActivity {
     GoogleApiClient connectGoogleApiClient(LocationActivityListener locationActivityListener);

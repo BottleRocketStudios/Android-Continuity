@@ -3,9 +3,8 @@ package com.bottlerocketstudios.continuitysample.core.databinding;
 import android.databinding.DataBindingComponent;
 
 /**
- * Created on 10/3/16.
+ * DataBindingComponent that will provide an ImageViewDataBindingAdapter that uses Glide.
  */
-
 public class GlideDataBindingComponent implements DataBindingComponent {
     @Override
     public ImageViewBindingAdapter getImageViewBindingAdapter() {

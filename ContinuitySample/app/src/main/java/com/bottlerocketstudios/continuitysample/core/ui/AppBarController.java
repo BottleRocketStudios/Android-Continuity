@@ -6,6 +6,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+/**
+ * Helper class to coordinate operations on the Toolbar.
+ */
 public final class AppBarController {
     private final ActionBar mActionBar;
     private final Toolbar mToolbar;

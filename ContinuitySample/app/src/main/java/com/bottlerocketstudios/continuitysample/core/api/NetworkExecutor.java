@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 /**
- * Created on 9/14/16.
+ * Wraps execution for NetworkRequest and ResponseHandler to return a NetworkResponse
  */
 public class NetworkExecutor<T> {
     private static final String TAG = NetworkExecutor.class.getSimpleName();

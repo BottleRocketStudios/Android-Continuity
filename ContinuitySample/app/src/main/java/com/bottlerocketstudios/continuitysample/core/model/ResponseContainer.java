@@ -1,7 +1,7 @@
 package com.bottlerocketstudios.continuitysample.core.model;
 
 /**
- * Created on 9/14/16.
+ * Generic container for responses from UseCase (Agent)
  */
 public class ResponseContainer<T> {
     private final T mValue;

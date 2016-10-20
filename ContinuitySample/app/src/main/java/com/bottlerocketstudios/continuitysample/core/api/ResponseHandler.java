@@ -3,7 +3,7 @@ package com.bottlerocketstudios.continuitysample.core.api;
 import okhttp3.Response;
 
 /**
- * Created on 9/14/16.
+ * Process the result of a NetworkRequest
  */
 public interface ResponseHandler<T> {
     T processResponse(Response response);

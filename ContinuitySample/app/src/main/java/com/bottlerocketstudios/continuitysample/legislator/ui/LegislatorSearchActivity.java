@@ -7,9 +7,6 @@ import android.os.Bundle;
 import com.bottlerocketstudios.continuitysample.R;
 import com.bottlerocketstudios.continuitysample.core.ui.BaseLocationActivity;
 
-/**
- * Created on 9/13/16.
- */
 public class LegislatorSearchActivity extends BaseLocationActivity implements LegislatorSearchInputFragment.Listener, LegislatorSearchResultFragment.Listener {
 
     private static final String FRAG_LEGISLATOR_SEARCH_INPUT = "legislatorSearchInpug";

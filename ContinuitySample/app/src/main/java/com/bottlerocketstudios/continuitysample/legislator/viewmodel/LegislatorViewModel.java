@@ -12,30 +12,24 @@ import com.bottlerocketstudios.continuitysample.BR;
 import com.bottlerocketstudios.continuitysample.R;
 
 /**
- * Created on 9/14/16.
+ * ViewModel used to display legislator information. We used the automatic parcelable generation
+ * feature in Android Studio as well as the automatic getter/setter generation after copying required
+ * private fields from the Legislator model object.
+ *
+ * This is Parcelable because it is passed from the list views to the detail view.
  */
 public class LegislatorViewModel extends BaseObservable implements Parcelable {
     private String mLastName;
     private String mStateName;
     private String mFirstName;
-    private String mMiddleName;
-    private long mDistrict;
-    private boolean mInOffice;
-    private String mState;
-    private String mOcEmail;
     private String mParty;
     private String mWebsite;
     private String mGovtrackId;
     private String mFacebookId;
     private String mBioguideId;
     private String mNickname;
-    private String mContactForm;
-    private String mPhone;
-    private String mTitle;
-    private String mNameSuffix;
     private String mTwitterId;
     private String mChamber;
-    private String mStateRank;
     private String mYoutubeId;
 
     private boolean mFavorite;
@@ -47,24 +41,14 @@ public class LegislatorViewModel extends BaseObservable implements Parcelable {
         mLastName = in.readString();
         mStateName = in.readString();
         mFirstName = in.readString();
-        mMiddleName = in.readString();
-        mDistrict = in.readLong();
-        mInOffice = in.readByte() != 0;
-        mState = in.readString();
-        mOcEmail = in.readString();
         mParty = in.readString();
         mWebsite = in.readString();
         mGovtrackId = in.readString();
         mFacebookId = in.readString();
         mBioguideId = in.readString();
         mNickname = in.readString();
-        mContactForm = in.readString();
-        mPhone = in.readString();
-        mTitle = in.readString();
-        mNameSuffix = in.readString();
         mTwitterId = in.readString();
         mChamber = in.readString();
-        mStateRank = in.readString();
         mYoutubeId = in.readString();
         mFavorite = in.readByte() != 0;
         mImageUrl = in.readString();
@@ -75,24 +59,14 @@ public class LegislatorViewModel extends BaseObservable implements Parcelable {
         dest.writeString(mLastName);
         dest.writeString(mStateName);
         dest.writeString(mFirstName);
-        dest.writeString(mMiddleName);
-        dest.writeLong(mDistrict);
-        dest.writeByte((byte) (mInOffice ? 1 : 0));
-        dest.writeString(mState);
-        dest.writeString(mOcEmail);
         dest.writeString(mParty);
         dest.writeString(mWebsite);
         dest.writeString(mGovtrackId);
         dest.writeString(mFacebookId);
         dest.writeString(mBioguideId);
         dest.writeString(mNickname);
-        dest.writeString(mContactForm);
-        dest.writeString(mPhone);
-        dest.writeString(mTitle);
-        dest.writeString(mNameSuffix);
         dest.writeString(mTwitterId);
         dest.writeString(mChamber);
-        dest.writeString(mStateRank);
         dest.writeString(mYoutubeId);
         dest.writeByte((byte) (mFavorite ? 1 : 0));
         dest.writeString(mImageUrl);
@@ -137,24 +111,29 @@ public class LegislatorViewModel extends BaseObservable implements Parcelable {
         return context.getString(R.string.legislator_party_and_state, getParty(), getStateName());
     }
 
+    /**
+     * Gets the tint of the favorite drawable for the ImageView. We already have the attribute
+     * mFavorite, but we take isFavorite as a parameter in the layout because it will cause DataBinding
+     * to wire up an update anytime the favorite state changes.
+     */
     public int getFavoriteDrawableTint(Context context, boolean isFavorite) {
         return ContextCompat.getColor(context, isFavorite ? R.color.favorite_selected : R.color.favorite_unselected);
     }
 
-    public boolean isTwitterVisible(String twitterId) {
-        return !TextUtils.isEmpty(twitterId);
+    public boolean isTwitterVisible() {
+        return !TextUtils.isEmpty(getTwitterId());
     }
 
-    public boolean isFacebookVisible(String facebookId) {
-        return !TextUtils.isEmpty(facebookId);
+    public boolean isFacebookVisible() {
+        return !TextUtils.isEmpty(getFacebookId());
     }
 
-    public boolean isYouTubeVisible(String youtubeId) {
-        return !TextUtils.isEmpty(youtubeId);
+    public boolean isYouTubeVisible() {
+        return !TextUtils.isEmpty(getYoutubeId());
     }
 
-    public boolean isWebsiteVisible(String website) {
-        return !TextUtils.isEmpty(website);
+    public boolean isWebsiteVisible() {
+        return !TextUtils.isEmpty(getWebsite());
     }
 
     /*  Regular Accessor Methods */
@@ -181,46 +160,6 @@ public class LegislatorViewModel extends BaseObservable implements Parcelable {
 
     public void setFirstName(String firstName) {
         mFirstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return mMiddleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        mMiddleName = middleName;
-    }
-
-    public long getDistrict() {
-        return mDistrict;
-    }
-
-    public void setDistrict(long district) {
-        mDistrict = district;
-    }
-
-    public boolean isInOffice() {
-        return mInOffice;
-    }
-
-    public void setInOffice(boolean inOffice) {
-        mInOffice = inOffice;
-    }
-
-    public String getState() {
-        return mState;
-    }
-
-    public void setState(String state) {
-        mState = state;
-    }
-
-    public String getOcEmail() {
-        return mOcEmail;
-    }
-
-    public void setOcEmail(String ocEmail) {
-        mOcEmail = ocEmail;
     }
 
     public String getParty() {
@@ -271,38 +210,6 @@ public class LegislatorViewModel extends BaseObservable implements Parcelable {
         mNickname = nickname;
     }
 
-    public String getContactForm() {
-        return mContactForm;
-    }
-
-    public void setContactForm(String contactForm) {
-        mContactForm = contactForm;
-    }
-
-    public String getPhone() {
-        return mPhone;
-    }
-
-    public void setPhone(String phone) {
-        mPhone = phone;
-    }
-
-    public String getTitle() {
-        return mTitle;
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
-    }
-
-    public String getNameSuffix() {
-        return mNameSuffix;
-    }
-
-    public void setNameSuffix(String nameSuffix) {
-        mNameSuffix = nameSuffix;
-    }
-
     public String getTwitterId() {
         return mTwitterId;
     }
@@ -317,14 +224,6 @@ public class LegislatorViewModel extends BaseObservable implements Parcelable {
 
     public void setChamber(String chamber) {
         mChamber = chamber;
-    }
-
-    public String getStateRank() {
-        return mStateRank;
-    }
-
-    public void setStateRank(String stateRank) {
-        mStateRank = stateRank;
     }
 
     public String getYoutubeId() {
