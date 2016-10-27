@@ -17,4 +17,11 @@ public class ServiceInjector {
         injectable.receiveInjection(SampleServiceLocator.get(type));
     }
 
+    public static <T> T resolve(Class<? extends T> type) {
+        if (!ServiceInitializer.isInitialized()) {
+            ServiceInitializer.initializeServices();
+        }
+        return SampleServiceLocator.get(type);
+    }
+
 }

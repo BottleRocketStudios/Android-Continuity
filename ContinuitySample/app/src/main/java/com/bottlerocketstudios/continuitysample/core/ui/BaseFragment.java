@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 
 import com.bottlerocketstudios.continuity.ContinuityRepository;
-import com.bottlerocketstudios.continuitysample.core.injection.Injectable;
 import com.bottlerocketstudios.continuitysample.core.injection.ServiceInjector;
 
 /**
@@ -15,12 +14,7 @@ public class BaseFragment extends Fragment {
     private ContinuityRepository mPresenterRepository;
 
     public BaseFragment() {
-        ServiceInjector.injectWithType(ContinuityRepository.class, new Injectable<ContinuityRepository>() {
-            @Override
-            public void receiveInjection(ContinuityRepository injection) {
-                mPresenterRepository = injection;
-            }
-        });
+        mPresenterRepository = ServiceInjector.resolve(ContinuityRepository.class);
     }
 
     protected ContinuityRepository getPresenterRepository() {

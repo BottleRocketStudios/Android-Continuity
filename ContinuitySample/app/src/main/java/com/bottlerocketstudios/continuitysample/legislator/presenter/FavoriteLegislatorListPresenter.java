@@ -5,7 +5,6 @@ import android.databinding.ObservableList;
 import android.view.View;
 
 import com.bottlerocketstudios.continuity.ContinuousObject;
-import com.bottlerocketstudios.continuitysample.core.injection.Injectable;
 import com.bottlerocketstudios.continuitysample.core.injection.ServiceInjector;
 import com.bottlerocketstudios.continuitysample.core.model.ResponseContainer;
 import com.bottlerocketstudios.continuitysample.core.model.ResponseStatus;
@@ -33,18 +32,12 @@ public class FavoriteLegislatorListPresenter implements ContinuousObject {
     //This observable list will be bound to a RecyclerView.Adapter so it should not be replaced, only updated.
     private final ObservableList<LegislatorViewModel> mLegislatorViewModelList = new ObservableArrayList<>();
 
-    private LegislatorRepository mLegislatorRepository;
+    private final LegislatorRepository mLegislatorRepository;
     private Listener mListener;
     private boolean mInitialized = false;
 
     public FavoriteLegislatorListPresenter() {
-        //Grab the Legislator Repository here so that it can be passed to use cases.
-        ServiceInjector.injectWithType(LegislatorRepository.class, new Injectable<LegislatorRepository>() {
-            @Override
-            public void receiveInjection(LegislatorRepository injection) {
-                mLegislatorRepository = injection;
-            }
-        });
+        mLegislatorRepository = ServiceInjector.resolve(LegislatorRepository.class);
     }
 
     /**
