@@ -12,7 +12,6 @@ import android.support.v4.content.PermissionChecker;
 import android.view.View;
 
 import com.bottlerocketstudios.continuity.ContinuousObject;
-import com.bottlerocketstudios.continuitysample.core.injection.Injectable;
 import com.bottlerocketstudios.continuitysample.core.injection.ServiceInjector;
 import com.bottlerocketstudios.continuitysample.core.model.ResponseContainer;
 import com.bottlerocketstudios.continuitysample.core.model.ResponseStatus;
@@ -48,8 +47,8 @@ public class LegislatorSearchResultPresenter implements ContinuousObject {
     //meta-ViewModels are updated, never replaced for the life of the Presenter.
     private final LegislatorSearchResultViewModel mLegislatorSearchResultViewModel = new LegislatorSearchResultViewModel();
     private final ObservableList<LegislatorViewModel> mLegislatorViewModelList = new ObservableArrayList<>();
+    private final LegislatorRepository mLegislatorRepository;
 
-    private LegislatorRepository mLegislatorRepository;
     private Listener mListener;
     private long mLocationRequestTimestamp;
     private LocationActivity mLocationActivity;
@@ -61,12 +60,7 @@ public class LegislatorSearchResultPresenter implements ContinuousObject {
     private boolean mSearchInitialized;
 
     public LegislatorSearchResultPresenter() {
-        ServiceInjector.injectWithType(LegislatorRepository.class, new Injectable<LegislatorRepository>() {
-            @Override
-            public void receiveInjection(LegislatorRepository injection) {
-                mLegislatorRepository = injection;
-            }
-        });
+        mLegislatorRepository = ServiceInjector.resolve(LegislatorRepository.class);
     }
 
     /**

@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.bottlerocketstudios.continuity.ContinuityRepository;
 import com.bottlerocketstudios.continuitysample.R;
-import com.bottlerocketstudios.continuitysample.core.injection.Injectable;
 import com.bottlerocketstudios.continuitysample.core.injection.ServiceInjector;
 import com.bottlerocketstudios.continuitysample.core.presenter.SampleDialogPresenter;
 import com.bottlerocketstudios.continuitysample.databinding.SampleDialogFragmentBinding;
@@ -28,9 +27,10 @@ public class SampleDialogFragment extends DialogFragment {
 
     private static final String ARG_DIALOG_CONFIGURATION = "dialogConfiguration";
 
+    private final ContinuityRepository mPresenterRepository;
+
     private DialogConfiguration mDialogConfiguration;
     private SampleDialogFragmentBinding mSampleDialogFragmentBinding;
-    private ContinuityRepository mPresenterRepository;
     private SampleDialogPresenter mSampleDialogPresenter;
     private DialogInterface.OnClickListener mPendingOnClickListener;
     private Handler mHandler;
@@ -48,12 +48,7 @@ public class SampleDialogFragment extends DialogFragment {
     }
 
     public SampleDialogFragment() {
-        ServiceInjector.injectWithType(ContinuityRepository.class, new Injectable<ContinuityRepository>() {
-            @Override
-            public void receiveInjection(ContinuityRepository injection) {
-                mPresenterRepository = injection;
-            }
-        });
+        mPresenterRepository = ServiceInjector.resolve(ContinuityRepository.class);
     }
 
     @Override

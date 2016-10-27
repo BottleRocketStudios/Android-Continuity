@@ -1,7 +1,6 @@
 package com.bottlerocketstudios.continuitysample.legislator.presenter;
 
 import com.bottlerocketstudios.continuity.ContinuousObject;
-import com.bottlerocketstudios.continuitysample.core.injection.Injectable;
 import com.bottlerocketstudios.continuitysample.core.injection.ServiceInjector;
 import com.bottlerocketstudios.continuitysample.core.model.ResponseContainer;
 import com.bottlerocketstudios.continuitysample.core.util.SocialLinkFormatter;
@@ -17,18 +16,14 @@ import com.bottlerocketstudios.groundcontrol.listener.FunctionalAgentListener;
  */
 public class LegislatorDetailPresenter implements ContinuousObject {
 
+    private final LegislatorRepository mLegislatorRepository;
+
     private Listener mListener;
     private LegislatorViewModel mLegislatorViewModel;
-    private LegislatorRepository mLegislatorRepository;
 
     public LegislatorDetailPresenter () {
         //Grab the Legislator Repository here so that it can be passed to use cases.
-        ServiceInjector.injectWithType(LegislatorRepository.class, new Injectable<LegislatorRepository>() {
-            @Override
-            public void receiveInjection(LegislatorRepository injection) {
-                mLegislatorRepository = injection;
-            }
-        });
+        mLegislatorRepository = ServiceInjector.resolve(LegislatorRepository.class);
     }
 
     /**

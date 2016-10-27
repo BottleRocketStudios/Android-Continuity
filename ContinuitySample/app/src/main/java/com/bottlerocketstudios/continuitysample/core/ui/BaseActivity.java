@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.bottlerocketstudios.continuity.ContinuityRepository;
 import com.bottlerocketstudios.continuitysample.R;
-import com.bottlerocketstudios.continuitysample.core.injection.Injectable;
 import com.bottlerocketstudios.continuitysample.core.injection.ServiceInjector;
 import com.bottlerocketstudios.continuitysample.databinding.BaseActivityBinding;
 
@@ -17,17 +16,12 @@ import com.bottlerocketstudios.continuitysample.databinding.BaseActivityBinding;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private ContinuityRepository mPresenterRepository;
+    private final ContinuityRepository mPresenterRepository;
     protected AppBarController mAppBarController;
     protected Toolbar mToolbar;
 
     public BaseActivity() {
-        ServiceInjector.injectWithType(ContinuityRepository.class, new Injectable<ContinuityRepository>() {
-            @Override
-            public void receiveInjection(ContinuityRepository injection) {
-                mPresenterRepository = injection;
-            }
-        });
+        mPresenterRepository = ServiceInjector.resolve(ContinuityRepository.class);
     }
 
     protected ContinuityRepository getPresenterRepository() {
